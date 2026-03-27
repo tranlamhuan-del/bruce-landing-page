@@ -32,7 +32,7 @@ export default function About() {
                 </p>
                 <p>
                   Tốt nghiệp Thạc sĩ Tài chính tại Đại học Massey (New Zealand) và
-                  là cựu sinh viên Ngoại thương (FTU), nền tảng học thuật vững chắc
+                  là cựu sinh viên Đại học Kinh tế TP.HCM - khoa Ngoại Thương (UEH), nền tảng học thuật vững chắc
                   giúp tôi tiếp cận công nghệ AI không chỉ như một công cụ, mà là
                   một đòn bẩy chiến lược cho sự tăng trưởng dài hạn.
                 </p>
@@ -51,10 +51,10 @@ export default function About() {
                 </div>
                 <div>
                   <h4 className="text-primary font-[family-name:var(--font-headline)] font-bold text-3xl">
-                    FTU
+                    UEH
                   </h4>
                   <p className="text-on-surface-variant text-sm font-[family-name:var(--font-label)] uppercase">
-                    Alumnus Foundation
+                    UEH & Massey Alumni
                   </p>
                 </div>
               </div>
