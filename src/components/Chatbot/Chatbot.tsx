@@ -53,7 +53,7 @@ function processAIResponse(
 }
 
 async function sendLeadToGoogleSheets(
-  leadData: { name?: string; phone?: string; email?: string },
+  leadData: { name?: string; phone?: string; email?: string; interest?: string },
   chatHistoryText: string,
   sessionId: string
 ) {
@@ -64,6 +64,7 @@ async function sendLeadToGoogleSheets(
       name: leadData.name || "",
       phone: leadData.phone || "",
       email: leadData.email || "",
+      interest: leadData.interest || "",
       source: window.location.href,
       sessionId,
       chatHistory: chatHistoryText,
