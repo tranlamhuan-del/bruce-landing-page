@@ -60,19 +60,22 @@ async function sendLeadToGoogleSheets(
   if (!GOOGLE_SCRIPT_URL) return;
 
   try {
+    const payload = JSON.stringify({
+      name: leadData.name || "",
+      phone: leadData.phone || "",
+      email: leadData.email || "",
+      source: window.location.href,
+      sessionId,
+      chatHistory: chatHistoryText,
+      timestamp: new Date().toLocaleString("vi-VN"),
+    });
+
+    // Use text/plain to avoid CORS preflight, Apps Script still receives JSON
     await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: leadData.name || "",
-        phone: leadData.phone || "",
-        email: leadData.email || "",
-        source: window.location.href,
-        sessionId,
-        chatHistory: chatHistoryText,
-        timestamp: new Date().toLocaleString("vi-VN"),
-      }),
+      headers: { "Content-Type": "text/plain" },
+      body: payload,
     });
   } catch (err) {
     console.warn("Lead send failed:", err);
