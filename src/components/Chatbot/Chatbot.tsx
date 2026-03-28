@@ -12,8 +12,72 @@ interface Message {
 const GREETING =
   "Xin chào! Tôi là trợ lý ảo của **Bruce Tran** — chuyên gia Quản Trị Doanh Nghiệp & Tài Chính Đầu Tư.\n\nTôi có thể giúp bạn tìm hiểu về:\n- 💼 Dịch vụ tư vấn quản trị & tài chính\n- 🤖 Giải pháp AI cho doanh nghiệp\n- 📚 Kinh nghiệm & triết lý đầu tư\n\nBạn cần hỗ trợ gì?";
 
+// Google Apps Script Web App URL (sẽ cập nhật sau khi deploy)
+const GOOGLE_SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || "";
+
 function generateSessionId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  return "session_" + Date.now() + "_" + Math.random().toString(36).substring(2, 7);
+}
+
+const LEAD_DATA_PATTERN = /\|\|LEAD_DATA:\s*(\{.*?\})\s*\|\|/;
+
+function processAIResponse(
+  aiResponse: string,
+  chatHistory: Message[],
+  sessionId: string
+): string {
+  if (!aiResponse.includes("||LEAD_DATA:")) return aiResponse;
+
+  const match = aiResponse.match(LEAD_DATA_PATTERN);
+  if (match?.[1]) {
+    try {
+      const leadData = JSON.parse(match[1]);
+
+      if (leadData.name || leadData.phone || leadData.email) {
+        // Build formatted chat history
+        const formattedHistory = chatHistory
+          .map((msg) => {
+            const role = msg.role === "user" ? "Khách" : "AI";
+            const content = msg.content.replace(LEAD_DATA_PATTERN, "").trim();
+            return `${role}: ${content}`;
+          })
+          .join("\n\n");
+
+        sendLeadToGoogleSheets(leadData, formattedHistory, sessionId);
+      }
+    } catch (err) {
+      console.error("Lead parse error:", err);
+    }
+  }
+
+  return aiResponse.replace(LEAD_DATA_PATTERN, "").trim();
+}
+
+async function sendLeadToGoogleSheets(
+  leadData: { name?: string; phone?: string; email?: string },
+  chatHistoryText: string,
+  sessionId: string
+) {
+  if (!GOOGLE_SCRIPT_URL) return;
+
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: leadData.name || "",
+        phone: leadData.phone || "",
+        email: leadData.email || "",
+        source: window.location.href,
+        sessionId,
+        chatHistory: chatHistoryText,
+        timestamp: new Date().toLocaleString("vi-VN"),
+      }),
+    });
+  } catch (err) {
+    console.warn("Lead send failed:", err);
+  }
 }
 
 export default function Chatbot() {
@@ -65,11 +129,16 @@ export default function Chatbot() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMessages, sessionId }),
+        body: JSON.stringify({ messages: newMessages }),
       });
 
       const data = await res.json();
-      const reply = data.reply || data.error || "Đã xảy ra lỗi.";
+      let reply = data.reply || data.error || "Đã xảy ra lỗi.";
+
+      // Process lead data + strip tag before displaying
+      const allMessages = [...newMessages, { role: "assistant" as const, content: reply }];
+      reply = processAIResponse(reply, allMessages, sessionId);
+
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch {
       setMessages((prev) => [
