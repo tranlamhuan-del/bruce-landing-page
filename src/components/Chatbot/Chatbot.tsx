@@ -12,14 +12,13 @@ interface Message {
 const GREETING =
   "Xin chào! Tôi là trợ lý ảo của **Bruce Tran** — chuyên gia Quản Trị Doanh Nghiệp & Tài Chính Đầu Tư.\n\nTôi có thể giúp bạn tìm hiểu về:\n- 💼 Dịch vụ tư vấn quản trị & tài chính\n- 🤖 Giải pháp AI cho doanh nghiệp\n- 📚 Kinh nghiệm & triết lý đầu tư\n\nBạn cần hỗ trợ gì?";
 
-// Google Apps Script Web App URL (sẽ cập nhật sau khi deploy)
-const GOOGLE_SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || "";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDEV-NeNFyjELGhKDgyrWUhf9WTxsxxrpzzS6GFEcdCxy0AsYnDFRSy84J-6b7FCQ/exec";
 
 function generateSessionId() {
   return "session_" + Date.now() + "_" + Math.random().toString(36).substring(2, 7);
 }
 
-const LEAD_DATA_PATTERN = /\|\|LEAD_DATA:\s*(\{.*?\})\s*\|\|/;
+const LEAD_DATA_PATTERN = /\|\|LEAD_DATA:\s*([\s\S]*?\})\s*\|\|/;
 
 function processAIResponse(
   aiResponse: string,
