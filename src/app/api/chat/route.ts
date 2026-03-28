@@ -2,7 +2,6 @@ import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
-import { appendLead, LeadInfo } from "@/lib/sheets";
 
 const SYSTEM_PROMPT_PATH = path.join(process.cwd(), "public", "chatbot_data.txt");
 
@@ -26,10 +25,11 @@ const EXTRACT_PROMPT = `Analyze the conversation below and extract any contact/l
 Conversation:
 `;
 
-async function extractLeadInfo(
+async function extractAndSaveLead(
   messages: { role: string; content: string }[],
+  sessionId: string,
   apiKey: string
-): Promise<(LeadInfo & { hasLeadInfo: boolean }) | null> {
+) {
   try {
     const ai = new GoogleGenAI({ apiKey });
     const conversationText = messages
@@ -42,14 +42,23 @@ async function extractLeadInfo(
     });
 
     const text = response.text?.trim() || "";
-    // Strip markdown code block if Gemini wraps it
     const cleaned = text.replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
-    const parsed = JSON.parse(cleaned);
-    console.log("Lead extracted:", JSON.stringify(parsed));
-    return parsed;
+    const lead = JSON.parse(cleaned);
+    console.log("Lead extracted:", JSON.stringify(lead));
+
+    if (lead.hasLeadInfo) {
+      // Call the separate lead-save API
+      const baseUrl = process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000";
+      await fetch(`${baseUrl}/api/lead`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...lead, sessionId }),
+      });
+    }
   } catch (err) {
     console.error("Lead extraction failed:", err);
-    return null;
   }
 }
 
@@ -87,18 +96,7 @@ export async function POST(req: NextRequest) {
 
     // Extract lead info in background (don't block response)
     if (sessionId && messages.length >= 3) {
-      extractLeadInfo(messages, apiKey).then((lead) => {
-        if (lead?.hasLeadInfo) {
-          appendLead({
-            sessionId,
-            name: lead.name || undefined,
-            phone: lead.phone || undefined,
-            email: lead.email || undefined,
-            mainQuestion: lead.mainQuestion || undefined,
-            interest: lead.interest || undefined,
-          });
-        }
-      });
+      extractAndSaveLead(messages, sessionId, apiKey);
     }
 
     return NextResponse.json({ reply: text });
@@ -106,7 +104,7 @@ export async function POST(req: NextRequest) {
     const errMsg = error instanceof Error ? error.message : String(error);
     console.error("Chat API error:", errMsg);
     return NextResponse.json(
-      { error: "Đã xảy ra lỗi. Vui lòng thử lại.", debug: errMsg },
+      { error: "Đã xảy ra lỗi. Vui lòng thử lại." },
       { status: 500 }
     );
   }
