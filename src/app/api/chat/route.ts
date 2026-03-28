@@ -42,9 +42,13 @@ async function extractLeadInfo(
     });
 
     const text = response.text?.trim() || "";
-    const parsed = JSON.parse(text);
+    // Strip markdown code block if Gemini wraps it
+    const cleaned = text.replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
+    const parsed = JSON.parse(cleaned);
+    console.log("Lead extracted:", JSON.stringify(parsed));
     return parsed;
-  } catch {
+  } catch (err) {
+    console.error("Lead extraction failed:", err);
     return null;
   }
 }
