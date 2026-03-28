@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
     const errMsg = error instanceof Error ? error.message : String(error);
     console.error("Chat API error:", errMsg);
     return NextResponse.json(
-      { error: "Đã xảy ra lỗi. Vui lòng thử lại." },
+      { error: "Đã xảy ra lỗi. Vui lòng thử lại.", debug: errMsg },
       { status: 500 }
     );
   }
