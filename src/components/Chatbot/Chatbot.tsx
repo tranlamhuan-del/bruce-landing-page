@@ -12,8 +12,13 @@ interface Message {
 const GREETING =
   "Xin chào! Tôi là trợ lý ảo của **Bruce Tran** — chuyên gia Quản Trị Doanh Nghiệp & Tài Chính Đầu Tư.\n\nTôi có thể giúp bạn tìm hiểu về:\n- 💼 Dịch vụ tư vấn quản trị & tài chính\n- 🤖 Giải pháp AI cho doanh nghiệp\n- 📚 Kinh nghiệm & triết lý đầu tư\n\nBạn cần hỗ trợ gì?";
 
+function generateSessionId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [sessionId, setSessionId] = useState(() => generateSessionId());
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: GREETING },
   ]);
@@ -39,6 +44,7 @@ export default function Chatbot() {
     setIsRefreshing(true);
     setTimeout(() => {
       setMessages([{ role: "assistant", content: GREETING }]);
+      setSessionId(generateSessionId());
       setInput("");
       setIsTyping(false);
       setIsRefreshing(false);
@@ -59,7 +65,7 @@ export default function Chatbot() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMessages }),
+        body: JSON.stringify({ messages: newMessages, sessionId }),
       });
 
       const data = await res.json();
