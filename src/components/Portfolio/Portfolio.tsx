@@ -9,7 +9,7 @@ const portfolioItems = [
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuD5aqloKBB4iX2edX5ExPaEkm_WOzHUOpuuym3yIwQWH3db-edbVBFvW28VNkuD4aSbTNckY9XFhlit-1RuZysU4j1T9nz5_YiCZfiWPhFfh6cAKNWOpjKd3MXpQGUCDFVOur0Y6hGPnlcozAmn3QHtGJU6ZLdzslmxYfMvmHnbGbu5Pq09CKTzpQnMsI1X39rzVP6PR4xS9IdyimIG1e3YYtkOUumjEHr9c812AXkncWL67ldVdQUNK8pxL57secJxXRWjaGS4Oby4",
     alt: "Marathon runner at sunrise",
-    badge: "FINISHED",
+    badge: "2026 GOAL",
     badgeColor: "bg-primary text-on-primary",
     title: "First Full Marathon",
     description:
