@@ -159,16 +159,16 @@ export default function QuizBai1() {
 
   if (!started) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-8 text-center">
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "linear-gradient(135deg, #f0e6ff 0%, #e0ecff 100%)", color: "#1a1a2e" }}>
+        <div className="max-w-lg w-full p-8 text-center" style={{ background: "#fff", borderRadius: 16, boxShadow: "0 8px 32px rgba(100,60,180,0.12)" }}>
           <div className="text-5xl mb-4">🧠</div>
-          <h1 className="text-2xl font-bold text-purple-800 mb-2">
+          <h1 className="text-2xl font-bold mb-2" style={{ color: "#5b21b6" }}>
             Bài Kiểm Tra — Bài 1
           </h1>
-          <p className="text-gray-600 mb-1">
+          <p className="mb-1" style={{ color: "#555" }}>
             Giải Mã Các Khái Niệm Về AI Cho Dân Non-Tech
           </p>
-          <p className="text-sm text-gray-400 mb-6">
+          <p className="text-sm mb-6" style={{ color: "#999" }}>
             10 câu trắc nghiệm • Đạt: {PASS_SCORE}/10 • Không giới hạn thời
             gian
           </p>
@@ -177,12 +177,14 @@ export default function QuizBai1() {
             placeholder="Nhập tên của bạn..."
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-purple-200 rounded-xl mb-4 text-center text-lg focus:outline-none focus:border-purple-500 transition"
+            className="w-full px-4 py-3 mb-4 text-center text-lg transition"
+            style={{ border: "2px solid #d8b4fe", borderRadius: 12, outline: "none", color: "#1a1a2e", background: "#fff" }}
           />
           <button
             onClick={() => name.trim() && setStarted(true)}
             disabled={!name.trim()}
-            className="w-full py-3 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition text-lg"
+            className="w-full py-3 font-bold transition text-lg"
+            style={{ background: name.trim() ? "#7c3aed" : "#ccc", color: "#fff", borderRadius: 12, cursor: name.trim() ? "pointer" : "not-allowed" }}
           >
             Bắt Đầu Làm Bài
           </button>
@@ -193,22 +195,26 @@ export default function QuizBai1() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-4">
+      <div className="min-h-screen p-4" style={{ background: "linear-gradient(135deg, #f0e6ff 0%, #e0ecff 100%)", color: "#1a1a2e" }}>
         <div className="max-w-2xl mx-auto">
           {/* Result card */}
           <div
-            className={`rounded-2xl shadow-xl p-8 text-center mb-8 ${passed ? "bg-green-50 border-2 border-green-300" : "bg-orange-50 border-2 border-orange-300"}`}
+            className="p-8 text-center mb-8"
+            style={{
+              borderRadius: 16,
+              boxShadow: "0 8px 32px rgba(100,60,180,0.12)",
+              background: passed ? "#f0fdf4" : "#fff7ed",
+              border: `2px solid ${passed ? "#86efac" : "#fdba74"}`,
+            }}
           >
             <div className="text-6xl mb-4">{passed ? "🎉" : "💪"}</div>
-            <h1 className="text-2xl font-bold mb-2">
+            <h1 className="text-2xl font-bold mb-2" style={{ color: "#1a1a2e" }}>
               {passed ? `Xuất sắc, ${name}!` : `Cố lên, ${name}!`}
             </h1>
-            <div
-              className={`text-5xl font-bold my-4 ${passed ? "text-green-600" : "text-orange-600"}`}
-            >
+            <div className="text-5xl font-bold my-4" style={{ color: passed ? "#16a34a" : "#ea580c" }}>
               {score}/10
             </div>
-            <p className="text-gray-600 mb-4">
+            <p className="mb-4" style={{ color: "#555" }}>
               {passed
                 ? "Bạn đã vượt qua! Sẵn sàng cho Bài 2: Prompt Engineering! 🚀"
                 : `Cần đạt ${PASS_SCORE}/10 để mở khóa Bài 2. Xem lại đáp án bên dưới rồi thử lại nhé!`}
@@ -219,7 +225,8 @@ export default function QuizBai1() {
                   setAnswers({});
                   setSubmitted(false);
                 }}
-                className="px-6 py-3 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 transition"
+                className="px-6 py-3 font-bold transition"
+                style={{ background: "#7c3aed", color: "#fff", borderRadius: 12, cursor: "pointer" }}
               >
                 Làm Lại
               </button>
@@ -227,7 +234,7 @@ export default function QuizBai1() {
           </div>
 
           {/* Review answers */}
-          <h2 className="text-xl font-bold text-gray-700 mb-4">
+          <h2 className="text-xl font-bold mb-4" style={{ color: "#374151" }}>
             Đáp án chi tiết:
           </h2>
           {questions.map((q) => {
@@ -236,29 +243,37 @@ export default function QuizBai1() {
             return (
               <div
                 key={q.id}
-                className={`bg-white rounded-xl shadow-md p-5 mb-4 border-l-4 ${isCorrect ? "border-green-500" : "border-red-400"}`}
+                className="p-5 mb-4"
+                style={{
+                  background: "#fff",
+                  borderRadius: 12,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                  borderLeft: `4px solid ${isCorrect ? "#22c55e" : "#f87171"}`,
+                }}
               >
                 <div className="flex items-start gap-2 mb-3">
                   <span className="text-lg">{isCorrect ? "✅" : "❌"}</span>
-                  <p className="font-semibold text-gray-800">
+                  <p className="font-semibold" style={{ color: "#1f2937" }}>
                     Câu {q.id}: {q.question}
                   </p>
                 </div>
                 {q.options.map((opt, i) => (
                   <div
                     key={i}
-                    className={`py-1.5 px-3 rounded-lg mb-1 text-sm ${
-                      i === q.correct
-                        ? "bg-green-100 text-green-800 font-semibold"
+                    className="py-1.5 px-3 mb-1 text-sm"
+                    style={{
+                      borderRadius: 8,
+                      ...(i === q.correct
+                        ? { background: "#dcfce7", color: "#166534", fontWeight: 600 }
                         : i === userAnswer && !isCorrect
-                          ? "bg-red-100 text-red-700 line-through"
-                          : "text-gray-500"
-                    }`}
+                          ? { background: "#fee2e2", color: "#b91c1c", textDecoration: "line-through" }
+                          : { color: "#6b7280" }),
+                    }}
                   >
                     {String.fromCharCode(65 + i)}. {opt}
                   </div>
                 ))}
-                <div className="mt-3 text-sm text-blue-700 bg-blue-50 p-3 rounded-lg">
+                <div className="mt-3 text-sm p-3" style={{ color: "#1d4ed8", background: "#eff6ff", borderRadius: 8 }}>
                   💡 {q.explanation}
                 </div>
               </div>
@@ -273,22 +288,22 @@ export default function QuizBai1() {
   const answeredCount = Object.keys(answers).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-4">
+    <div className="min-h-screen p-4" style={{ background: "linear-gradient(135deg, #f0e6ff 0%, #e0ecff 100%)", color: "#1a1a2e" }}>
       <div className="max-w-2xl mx-auto">
         {/* Progress */}
-        <div className="bg-white rounded-xl shadow-md p-4 mb-6 sticky top-4 z-10">
+        <div className="p-4 mb-6 sticky top-4 z-10" style={{ background: "#fff", borderRadius: 12, boxShadow: "0 4px 16px rgba(0,0,0,0.1)" }}>
           <div className="flex justify-between items-center mb-2">
-            <span className="font-semibold text-purple-800">
+            <span className="font-semibold" style={{ color: "#5b21b6" }}>
               {name} — Bài Kiểm Tra Bài 1
             </span>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm" style={{ color: "#888" }}>
               {answeredCount}/10 câu
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full h-2" style={{ background: "#e5e7eb", borderRadius: 999 }}>
             <div
-              className="bg-purple-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${(answeredCount / 10) * 100}%` }}
+              className="h-2 transition-all duration-300"
+              style={{ width: `${(answeredCount / 10) * 100}%`, background: "#7c3aed", borderRadius: 999 }}
             />
           </div>
         </div>
@@ -297,14 +312,19 @@ export default function QuizBai1() {
         {questions.map((q) => (
           <div
             key={q.id}
-            className={`bg-white rounded-xl shadow-md p-5 mb-4 transition border-2 ${
-              answers[q.id] !== undefined
-                ? "border-purple-300"
-                : "border-transparent"
-            }`}
+            className="p-5 mb-4 transition"
+            style={{
+              background: "#fff",
+              borderRadius: 12,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+              border: `2px solid ${answers[q.id] !== undefined ? "#c4b5fd" : "transparent"}`,
+            }}
           >
-            <p className="font-semibold text-gray-800 mb-3">
-              <span className="inline-block bg-purple-100 text-purple-700 rounded-full w-7 h-7 text-center leading-7 text-sm mr-2">
+            <p className="font-semibold mb-3" style={{ color: "#1f2937" }}>
+              <span
+                className="inline-block text-center text-sm mr-2"
+                style={{ background: "#ede9fe", color: "#6d28d9", borderRadius: 999, width: 28, height: 28, lineHeight: "28px" }}
+              >
                 {q.id}
               </span>
               {q.question}
@@ -313,11 +333,13 @@ export default function QuizBai1() {
               {q.options.map((opt, i) => (
                 <label
                   key={i}
-                  className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition ${
-                    answers[q.id] === i
-                      ? "bg-purple-100 border-2 border-purple-400"
-                      : "bg-gray-50 border-2 border-transparent hover:bg-gray-100"
-                  }`}
+                  className="flex items-center gap-3 p-3 cursor-pointer transition"
+                  style={{
+                    borderRadius: 10,
+                    ...(answers[q.id] === i
+                      ? { background: "#ede9fe", border: "2px solid #a78bfa" }
+                      : { background: "#f9fafb", border: "2px solid transparent" }),
+                  }}
                 >
                   <input
                     type="radio"
@@ -326,10 +348,11 @@ export default function QuizBai1() {
                     onChange={() =>
                       setAnswers((prev) => ({ ...prev, [q.id]: i }))
                     }
-                    className="accent-purple-600 w-4 h-4"
+                    className="w-4 h-4"
+                    style={{ accentColor: "#7c3aed" }}
                   />
-                  <span className="text-sm">
-                    <strong className="text-purple-600 mr-1">
+                  <span className="text-sm" style={{ color: "#374151" }}>
+                    <strong className="mr-1" style={{ color: "#7c3aed" }}>
                       {String.fromCharCode(65 + i)}.
                     </strong>
                     {opt}
@@ -345,7 +368,14 @@ export default function QuizBai1() {
           <button
             onClick={() => answeredCount === 10 && setSubmitted(true)}
             disabled={answeredCount < 10}
-            className="px-8 py-4 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition text-lg shadow-lg"
+            className="px-8 py-4 font-bold transition text-lg"
+            style={{
+              background: answeredCount < 10 ? "#ccc" : "#7c3aed",
+              color: "#fff",
+              borderRadius: 12,
+              cursor: answeredCount < 10 ? "not-allowed" : "pointer",
+              boxShadow: answeredCount < 10 ? "none" : "0 4px 16px rgba(124,58,237,0.3)",
+            }}
           >
             {answeredCount < 10
               ? `Còn ${10 - answeredCount} câu chưa trả lời`
