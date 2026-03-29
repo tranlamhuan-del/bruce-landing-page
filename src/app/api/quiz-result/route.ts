@@ -67,9 +67,10 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Quiz result save error:", error);
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("Quiz result save error:", msg);
     return NextResponse.json(
-      { error: "Failed to save result" },
+      { error: "Failed to save result", detail: msg },
       { status: 500 }
     );
   }
