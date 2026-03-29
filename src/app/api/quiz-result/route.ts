@@ -21,6 +21,20 @@ async function getAccessToken() {
   return data.access_token as string;
 }
 
+export async function GET() {
+  const cid = process.env.GOOGLE_CLIENT_ID || "MISSING";
+  const cs = process.env.GOOGLE_CLIENT_SECRET || "MISSING";
+  const rt = process.env.GOOGLE_REFRESH_TOKEN || "MISSING";
+  return NextResponse.json({
+    cid: cid.substring(0, 10) + "..." + cid.substring(cid.length - 10),
+    cs: cs.substring(0, 8) + "...",
+    rt: rt.substring(0, 8) + "...",
+    cidLen: cid.length,
+    csLen: cs.length,
+    rtLen: rt.length,
+  });
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
