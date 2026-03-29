@@ -165,7 +165,7 @@ export default function QuizBai1() {
     setSaving(true);
 
     try {
-      await fetch("/api/quiz-result", {
+      await fetch("/api/quiz-ai-bai-1", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, score: s, passed: p, answers }),
