@@ -32,7 +32,7 @@ function processAIResponse(
     try {
       const leadData = JSON.parse(match[1]);
 
-      if (leadData.name || leadData.phone || leadData.email) {
+      if (leadData.phone || leadData.email) {
         // Build formatted chat history
         const formattedHistory = chatHistory
           .map((msg) => {
