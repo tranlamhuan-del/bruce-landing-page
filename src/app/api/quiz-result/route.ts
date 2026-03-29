@@ -1,18 +1,24 @@
-import { google } from "googleapis";
 import { NextResponse } from "next/server";
 
 const SPREADSHEET_ID = "1Nlh_bNRqCbdgNA4xNdZEObiQUHjJ1SGRwS66xWCTUPI";
-const SHEET_NAME = "Sheet1";
+const TOKEN_URL = "https://oauth2.googleapis.com/token";
 
-function getAuth() {
-  const oauth2Client = new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET
-  );
-  oauth2Client.setCredentials({
-    refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
+async function getAccessToken() {
+  const res = await fetch(TOKEN_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      client_id: process.env.GOOGLE_CLIENT_ID!,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+      refresh_token: process.env.GOOGLE_REFRESH_TOKEN!,
+      grant_type: "refresh_token",
+    }),
   });
-  return oauth2Client;
+  const data = await res.json();
+  if (!data.access_token) {
+    throw new Error("Token refresh failed: " + JSON.stringify(data));
+  }
+  return data.access_token as string;
 }
 
 export async function POST(request: Request) {
@@ -23,9 +29,6 @@ export async function POST(request: Request) {
     if (!name || !email || score === undefined) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
-
-    const auth = getAuth();
-    const sheets = google.sheets({ version: "v4", auth });
 
     const now = new Date().toLocaleString("vi-VN", {
       timeZone: "Asia/Ho_Chi_Minh",
@@ -43,12 +46,24 @@ export async function POST(request: Request) {
       }),
     ];
 
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A:O`,
-      valueInputOption: "USER_ENTERED",
-      requestBody: { values: [row] },
-    });
+    const accessToken = await getAccessToken();
+
+    const sheetsRes = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Sheet1!A:O:append?valueInputOption=USER_ENTERED`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ values: [row] }),
+      }
+    );
+
+    if (!sheetsRes.ok) {
+      const err = await sheetsRes.text();
+      throw new Error("Sheets API error: " + err);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
