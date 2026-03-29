@@ -150,12 +150,30 @@ export default function QuizBai1() {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [started, setStarted] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const score = submitted
-    ? questions.filter((q) => answers[q.id] === q.correct).length
-    : 0;
+  const calcScore = () => questions.filter((q) => answers[q.id] === q.correct).length;
+  const score = submitted ? calcScore() : 0;
   const passed = score >= PASS_SCORE;
+
+  const handleSubmit = async () => {
+    const s = calcScore();
+    const p = s >= PASS_SCORE;
+    setSubmitted(true);
+    setSaving(true);
+    try {
+      await fetch("/api/quiz-result", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, score: s, passed: p, answers }),
+      });
+    } catch {
+      // silent fail - don't block user experience
+    }
+    setSaving(false);
+  };
 
   if (!started) {
     return (
@@ -177,14 +195,22 @@ export default function QuizBai1() {
             placeholder="Nhập tên của bạn..."
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-3 mb-3 text-center text-lg transition"
+            style={{ border: "2px solid #d8b4fe", borderRadius: 12, outline: "none", color: "#1a1a2e", background: "#fff" }}
+          />
+          <input
+            type="email"
+            placeholder="Email của bạn..."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-3 mb-4 text-center text-lg transition"
             style={{ border: "2px solid #d8b4fe", borderRadius: 12, outline: "none", color: "#1a1a2e", background: "#fff" }}
           />
           <button
-            onClick={() => name.trim() && setStarted(true)}
-            disabled={!name.trim()}
+            onClick={() => name.trim() && email.trim() && setStarted(true)}
+            disabled={!name.trim() || !email.trim()}
             className="w-full py-3 font-bold transition text-lg"
-            style={{ background: name.trim() ? "#7c3aed" : "#ccc", color: "#fff", borderRadius: 12, cursor: name.trim() ? "pointer" : "not-allowed" }}
+            style={{ background: name.trim() && email.trim() ? "#7c3aed" : "#ccc", color: "#fff", borderRadius: 12, cursor: name.trim() && email.trim() ? "pointer" : "not-allowed" }}
           >
             Bắt Đầu Làm Bài
           </button>
@@ -366,7 +392,7 @@ export default function QuizBai1() {
         {/* Submit */}
         <div className="text-center pb-8">
           <button
-            onClick={() => answeredCount === 10 && setSubmitted(true)}
+            onClick={() => answeredCount === 10 && handleSubmit()}
             disabled={answeredCount < 10}
             className="px-8 py-4 font-bold transition text-lg"
             style={{
