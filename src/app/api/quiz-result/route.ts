@@ -13,17 +13,14 @@ export async function POST(request: Request) {
       timeZone: "Asia/Ho_Chi_Minh",
     });
 
-    const answerDetail = Array.from({ length: 10 }, (_, i) => {
-      const a = answers[i + 1];
-      return `C${i + 1}: ${a !== undefined ? String.fromCharCode(65 + a) : "-"}`;
-    }).join(" | ");
-
-    // FormSubmit.co - free, no signup, sends email directly
+    // FormSubmit.co - sends email to tranlamhuan@gmail.com
     await fetch("https://formsubmit.co/ajax/tranlamhuan@gmail.com", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        Referer: "https://tranlamhuan.vn",
+        Origin: "https://tranlamhuan.vn",
       },
       body: JSON.stringify({
         _subject: `Quiz Bai 1: ${name} - ${score}/10 ${passed ? "DAT" : "CHUA DAT"}`,
@@ -32,13 +29,12 @@ export async function POST(request: Request) {
         "Diem so": `${score}/10`,
         "Ket qua": passed ? "Dat" : "Chua dat",
         "Thoi gian": now,
-        "Chi tiet": answerDetail,
         _template: "table",
       }),
     });
 
     return NextResponse.json({ success: true });
   } catch {
-    return NextResponse.json({ success: true }); // Don't block user
+    return NextResponse.json({ success: true });
   }
 }
