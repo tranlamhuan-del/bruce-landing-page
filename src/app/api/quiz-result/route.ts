@@ -13,7 +13,25 @@ export async function POST(request: Request) {
       timeZone: "Asia/Ho_Chi_Minh",
     });
 
-    // FormSubmit.co - sends email to tranlamhuan@gmail.com
+    const sheetData = {
+      name,
+      email,
+      score,
+      passed: passed ? "Dat" : "Chua dat",
+      time: now,
+    };
+
+    // Google Sheets via Apps Script
+    await fetch(
+      "https://script.google.com/macros/s/AKfycby8wRPpry6i9arLYz7uzT1N_SMYVq9dfle2ammwQI-TqUS5VEc5CwGgGrSdVHNMjRKf/exec",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(sheetData),
+      }
+    );
+
+    // Email notification via FormSubmit
     await fetch("https://formsubmit.co/ajax/tranlamhuan@gmail.com", {
       method: "POST",
       headers: {
