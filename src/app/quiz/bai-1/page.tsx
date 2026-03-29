@@ -222,90 +222,38 @@ export default function QuizBai1() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen p-4" style={{ background: "linear-gradient(135deg, #f0e6ff 0%, #e0ecff 100%)", color: "#1a1a2e" }}>
-        <div className="max-w-2xl mx-auto">
-          {/* Result card */}
-          <div
-            className="p-8 text-center mb-8"
-            style={{
-              borderRadius: 16,
-              boxShadow: "0 8px 32px rgba(100,60,180,0.12)",
-              background: passed ? "#f0fdf4" : "#fff7ed",
-              border: `2px solid ${passed ? "#86efac" : "#fdba74"}`,
-            }}
-          >
-            <div className="text-6xl mb-4">{passed ? "🎉" : "💪"}</div>
-            <h1 className="text-2xl font-bold mb-2" style={{ color: "#1a1a2e" }}>
-              {passed ? `Xuất sắc, ${name}!` : `Cố lên, ${name}!`}
-            </h1>
-            <div className="text-5xl font-bold my-4" style={{ color: passed ? "#16a34a" : "#ea580c" }}>
-              {score}/10
-            </div>
-            <p className="mb-4" style={{ color: "#555" }}>
-              {passed
-                ? "Bạn đã vượt qua! Sẵn sàng cho Bài 2: Prompt Engineering! 🚀"
-                : `Cần đạt ${PASS_SCORE}/10 để mở khóa Bài 2. Xem lại đáp án bên dưới rồi thử lại nhé!`}
-            </p>
-            {!passed && (
-              <button
-                onClick={() => {
-                  setAnswers({});
-                  setSubmitted(false);
-                }}
-                className="px-6 py-3 font-bold transition"
-                style={{ background: "#7c3aed", color: "#fff", borderRadius: 12, cursor: "pointer" }}
-              >
-                Làm Lại
-              </button>
-            )}
-          </div>
-
-          {/* Review answers */}
-          <h2 className="text-xl font-bold mb-4" style={{ color: "#374151" }}>
-            Đáp án chi tiết:
-          </h2>
-          {questions.map((q) => {
-            const userAnswer = answers[q.id];
-            const isCorrect = userAnswer === q.correct;
-            return (
-              <div
-                key={q.id}
-                className="p-5 mb-4"
-                style={{
-                  background: "#fff",
-                  borderRadius: 12,
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                  borderLeft: `4px solid ${isCorrect ? "#22c55e" : "#f87171"}`,
-                }}
-              >
-                <div className="flex items-start gap-2 mb-3">
-                  <span className="text-lg">{isCorrect ? "✅" : "❌"}</span>
-                  <p className="font-semibold" style={{ color: "#1f2937" }}>
-                    Câu {q.id}: {q.question}
-                  </p>
-                </div>
-                {q.options.map((opt, i) => (
-                  <div
-                    key={i}
-                    className="py-1.5 px-3 mb-1 text-sm"
-                    style={{
-                      borderRadius: 8,
-                      ...(i === q.correct
-                        ? { background: "#dcfce7", color: "#166534", fontWeight: 600 }
-                        : i === userAnswer && !isCorrect
-                          ? { background: "#fee2e2", color: "#b91c1c", textDecoration: "line-through" }
-                          : { color: "#6b7280" }),
-                    }}
-                  >
-                    {String.fromCharCode(65 + i)}. {opt}
-                  </div>
-                ))}
-                <div className="mt-3 text-sm p-3" style={{ color: "#1d4ed8", background: "#eff6ff", borderRadius: 8 }}>
-                  💡 {q.explanation}
-                </div>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "linear-gradient(135deg, #f0e6ff 0%, #e0ecff 100%)", color: "#1a1a2e" }}>
+        <div className="max-w-lg w-full p-8 text-center" style={{ background: "#fff", borderRadius: 16, boxShadow: "0 8px 32px rgba(100,60,180,0.12)" }}>
+          {passed ? (
+            <>
+              <div className="text-6xl mb-4">🎉</div>
+              <h1 className="text-2xl font-bold mb-2" style={{ color: "#16a34a" }}>
+                Xuất sắc, {name}!
+              </h1>
+              <div className="text-5xl font-bold my-4" style={{ color: "#16a34a" }}>
+                {score}/10
               </div>
-            );
-          })}
+              <p className="mb-4" style={{ color: "#555" }}>
+                Bạn đã vượt qua! Sẵn sàng cho Bài 2: Prompt Engineering! 🚀
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="text-6xl mb-4">📚</div>
+              <h1 className="text-2xl font-bold mb-2" style={{ color: "#ea580c" }}>
+                Chưa đạt, {name}!
+              </h1>
+              <div className="text-5xl font-bold my-4" style={{ color: "#ea580c" }}>
+                {score}/10
+              </div>
+              <p className="mb-2" style={{ color: "#555" }}>
+                Cần đạt {PASS_SCORE}/10 để mở khóa Bài 2.
+              </p>
+              <p className="mb-6" style={{ color: "#555" }}>
+                Vui lòng xem lại nội dung bài học rồi quay lại làm bài kiểm tra sau nhé!
+              </p>
+            </>
+          )}
         </div>
       </div>
     );
@@ -336,59 +284,82 @@ export default function QuizBai1() {
         </div>
 
         {/* Questions */}
-        {questions.map((q) => (
-          <div
-            key={q.id}
-            className="p-5 mb-4 transition"
-            style={{
-              background: "#fff",
-              borderRadius: 12,
-              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-              border: `2px solid ${answers[q.id] !== undefined ? "#c4b5fd" : "transparent"}`,
-            }}
-          >
-            <p className="font-semibold mb-3" style={{ color: "#1f2937" }}>
-              <span
-                className="inline-block text-center text-sm mr-2"
-                style={{ background: "#ede9fe", color: "#6d28d9", borderRadius: 999, width: 28, height: 28, lineHeight: "28px" }}
-              >
-                {q.id}
-              </span>
-              {q.question}
-            </p>
-            <div className="space-y-2">
-              {q.options.map((opt, i) => (
-                <label
-                  key={i}
-                  className="flex items-center gap-3 p-3 cursor-pointer transition"
-                  style={{
-                    borderRadius: 10,
-                    ...(answers[q.id] === i
-                      ? { background: "#ede9fe", border: "2px solid #a78bfa" }
-                      : { background: "#f9fafb", border: "2px solid transparent" }),
-                  }}
-                >
-                  <input
-                    type="radio"
-                    name={`q${q.id}`}
-                    checked={answers[q.id] === i}
-                    onChange={() =>
-                      setAnswers((prev) => ({ ...prev, [q.id]: i }))
-                    }
-                    className="w-4 h-4"
-                    style={{ accentColor: "#7c3aed" }}
-                  />
-                  <span className="text-sm" style={{ color: "#374151" }}>
-                    <strong className="mr-1" style={{ color: "#7c3aed" }}>
-                      {String.fromCharCode(65 + i)}.
-                    </strong>
-                    {opt}
+        {questions.map((q) => {
+          const answered = answers[q.id] !== undefined;
+          const isCorrect = answered && answers[q.id] === q.correct;
+
+          return (
+            <div
+              key={q.id}
+              className="p-5 mb-4 transition"
+              style={{
+                background: "#fff",
+                borderRadius: 12,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                border: `2px solid ${answered ? (isCorrect ? "#86efac" : "#fca5a5") : "transparent"}`,
+              }}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <p className="font-semibold" style={{ color: "#1f2937" }}>
+                  <span
+                    className="inline-block text-center text-sm mr-2"
+                    style={{ background: "#ede9fe", color: "#6d28d9", borderRadius: 999, width: 28, height: 28, lineHeight: "28px" }}
+                  >
+                    {q.id}
                   </span>
-                </label>
-              ))}
+                  {q.question}
+                </p>
+                {answered && (
+                  <span className="text-lg ml-2 flex-shrink-0">{isCorrect ? "✅" : "❌"}</span>
+                )}
+              </div>
+              <div className="space-y-2">
+                {q.options.map((opt, i) => {
+                  const isSelected = answers[q.id] === i;
+                  let optStyle: React.CSSProperties = { background: "#f9fafb", border: "2px solid transparent" };
+
+                  if (answered) {
+                    if (isSelected && isCorrect) {
+                      optStyle = { background: "#dcfce7", border: "2px solid #86efac" };
+                    } else if (isSelected && !isCorrect) {
+                      optStyle = { background: "#fee2e2", border: "2px solid #fca5a5" };
+                    } else {
+                      optStyle = { background: "#f9fafb", border: "2px solid transparent", opacity: 0.5 };
+                    }
+                  } else if (isSelected) {
+                    optStyle = { background: "#ede9fe", border: "2px solid #a78bfa" };
+                  }
+
+                  return (
+                    <label
+                      key={i}
+                      className="flex items-center gap-3 p-3 transition"
+                      style={{ borderRadius: 10, cursor: answered ? "default" : "pointer", ...optStyle }}
+                    >
+                      <input
+                        type="radio"
+                        name={`q${q.id}`}
+                        checked={isSelected}
+                        disabled={answered}
+                        onChange={() =>
+                          setAnswers((prev) => ({ ...prev, [q.id]: i }))
+                        }
+                        className="w-4 h-4"
+                        style={{ accentColor: "#7c3aed" }}
+                      />
+                      <span className="text-sm" style={{ color: "#374151" }}>
+                        <strong className="mr-1" style={{ color: "#7c3aed" }}>
+                          {String.fromCharCode(65 + i)}.
+                        </strong>
+                        {opt}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* Submit */}
         <div className="text-center pb-8">
