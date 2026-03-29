@@ -163,14 +163,34 @@ export default function QuizBai1() {
     const p = s >= PASS_SCORE;
     setSubmitted(true);
     setSaving(true);
+
+    const now = new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
+    const payload = { name, email, score: s, passed: p, answers };
+
     try {
-      await fetch("/api/quiz-result", {
+      // Save to Google Sheet via Apps Script
+      fetch("/api/quiz-result", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, score: s, passed: p, answers }),
+        body: JSON.stringify(payload),
+      });
+
+      // Email notification via FormSubmit (client-side)
+      fetch("https://formsubmit.co/ajax/tranlamhuan@gmail.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: `Quiz Bai 1: ${name} - ${s}/10 ${p ? "DAT" : "CHUA DAT"}`,
+          "Ho ten": name,
+          Email: email,
+          "Diem so": `${s}/10`,
+          "Ket qua": p ? "Dat" : "Chua dat",
+          "Thoi gian": now,
+          _template: "table",
+        }),
       });
     } catch {
-      // silent fail - don't block user experience
+      // silent fail
     }
     setSaving(false);
   };
