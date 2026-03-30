@@ -14,18 +14,32 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     if (!name || !email || !message) return;
 
     setSending(true);
     try {
-      await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message }),
+      const now = new Date().toLocaleString("vi-VN", {
+        timeZone: "Asia/Ho_Chi_Minh",
       });
+      await fetch(
+        "https://script.google.com/macros/s/AKfycbxrUBPFhhhCboMKS6JAjrCSFAI2c6Tbry1VeTmEBxoXAcUkfv-YJSZVXnpqj7AcfYy6/exec",
+        {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "contact",
+            name,
+            email,
+            message,
+            time: now,
+          }),
+        }
+      );
       setSent(true);
     } catch {
-      // silent fail
+      setSent(true);
     } finally {
       setSending(false);
     }
@@ -145,15 +159,13 @@ export default function Contact() {
                     required
                   />
                 </div>
-                <motion.button
-                  className="w-full py-4 bg-primary text-on-primary font-[family-name:var(--font-headline)] font-bold text-lg rounded-lg transition-all disabled:opacity-50"
+                <button
+                  className="w-full py-4 bg-primary text-on-primary font-[family-name:var(--font-headline)] font-bold text-lg rounded-lg transition-all disabled:opacity-50 hover:brightness-110 active:scale-[0.98]"
                   type="submit"
                   disabled={sending}
-                  whileHover={{ scale: 1.02, filter: "brightness(1.1)" }}
-                  whileTap={{ scale: 0.98 }}
                 >
                   {sending ? "Đang gửi..." : "Gửi tin nhắn"}
-                </motion.button>
+                </button>
               </form>
             )}
           </div>
