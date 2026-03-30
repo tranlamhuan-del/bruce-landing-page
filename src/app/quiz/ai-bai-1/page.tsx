@@ -1,14 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
-interface Question {
-  id: number;
-  question: string;
-  options: string[];
-  correct: number;
-  explanation: string;
-}
+import QuizTemplate, {
+  type Question,
+} from "@/components/Quiz/QuizTemplate";
 
 const questions: Question[] = [
   {
@@ -66,7 +60,7 @@ const questions: Question[] = [
   },
   {
     id: 5,
-    question: 'Trong \"Deep Learning\", chữ \"Deep\" có nghĩa là gì?',
+    question: 'Trong "Deep Learning", chữ "Deep" có nghĩa là gì?',
     options: [
       "AI hiểu biết sâu sắc",
       "Mạng neural có nhiều tầng (layers)",
@@ -144,243 +138,16 @@ const questions: Question[] = [
   },
 ];
 
-const PASS_SCORE = 7;
-
 export default function QuizBai1() {
-  const [answers, setAnswers] = useState<Record<number, number>>({});
-  const [submitted, setSubmitted] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [started, setStarted] = useState(false);
-  const [saving, setSaving] = useState(false);
-
-  const calcScore = () => questions.filter((q) => answers[q.id] === q.correct).length;
-  const score = submitted ? calcScore() : 0;
-  const passed = score >= PASS_SCORE;
-
-  const handleSubmit = async () => {
-    const s = calcScore();
-    const p = s >= PASS_SCORE;
-    setSubmitted(true);
-    setSaving(true);
-
-    try {
-      await fetch("/api/quiz-ai-bai-1", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, score: s, passed: p, answers }),
-      });
-    } catch {
-      // silent fail
-    }
-    setSaving(false);
-  };
-
-  if (!started) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "linear-gradient(135deg, #f0e6ff 0%, #e0ecff 100%)", color: "#1a1a2e" }}>
-        <div className="max-w-lg w-full p-8 text-center" style={{ background: "#fff", borderRadius: 16, boxShadow: "0 8px 32px rgba(100,60,180,0.12)" }}>
-          <div className="text-5xl mb-4">🧠</div>
-          <h1 className="text-2xl font-bold mb-2" style={{ color: "#5b21b6" }}>
-            Bài Kiểm Tra — Bài 1
-          </h1>
-          <p className="mb-1" style={{ color: "#555" }}>
-            Giải Mã Các Khái Niệm Về AI Cho Dân Non-Tech
-          </p>
-          <p className="text-sm mb-6" style={{ color: "#999" }}>
-            10 câu trắc nghiệm • Đạt: {PASS_SCORE}/10 • Không giới hạn thời
-            gian
-          </p>
-          <input
-            type="text"
-            placeholder="Nhập tên của bạn..."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3 mb-3 text-center text-lg transition"
-            style={{ border: "2px solid #d8b4fe", borderRadius: 12, outline: "none", color: "#1a1a2e", background: "#fff" }}
-          />
-          <input
-            type="email"
-            placeholder="Email của bạn..."
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 mb-4 text-center text-lg transition"
-            style={{ border: "2px solid #d8b4fe", borderRadius: 12, outline: "none", color: "#1a1a2e", background: "#fff" }}
-          />
-          <button
-            onClick={() => name.trim() && email.trim() && setStarted(true)}
-            disabled={!name.trim() || !email.trim()}
-            className="w-full py-3 font-bold transition text-lg"
-            style={{ background: name.trim() && email.trim() ? "#7c3aed" : "#ccc", color: "#fff", borderRadius: 12, cursor: name.trim() && email.trim() ? "pointer" : "not-allowed" }}
-          >
-            Bắt Đầu Làm Bài
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (submitted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "linear-gradient(135deg, #f0e6ff 0%, #e0ecff 100%)", color: "#1a1a2e" }}>
-        <div className="max-w-lg w-full p-8 text-center" style={{ background: "#fff", borderRadius: 16, boxShadow: "0 8px 32px rgba(100,60,180,0.12)" }}>
-          {passed ? (
-            <>
-              <div className="text-6xl mb-4">🎉</div>
-              <h1 className="text-2xl font-bold mb-2" style={{ color: "#16a34a" }}>
-                Xuất sắc, {name}!
-              </h1>
-              <div className="text-5xl font-bold my-4" style={{ color: "#16a34a" }}>
-                {score}/10
-              </div>
-              <p className="mb-4" style={{ color: "#555" }}>
-                Bạn đã vượt qua! Sẵn sàng cho Bài 2: Prompt Engineering! 🚀
-              </p>
-            </>
-          ) : (
-            <>
-              <div className="text-6xl mb-4">📚</div>
-              <h1 className="text-2xl font-bold mb-2" style={{ color: "#ea580c" }}>
-                Chưa đạt, {name}!
-              </h1>
-              <div className="text-5xl font-bold my-4" style={{ color: "#ea580c" }}>
-                {score}/10
-              </div>
-              <p className="mb-2" style={{ color: "#555" }}>
-                Cần đạt {PASS_SCORE}/10 để mở khóa Bài 2.
-              </p>
-              <p className="mb-6" style={{ color: "#555" }}>
-                Vui lòng xem lại nội dung bài học rồi quay lại làm bài kiểm tra sau nhé!
-              </p>
-            </>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  // Quiz form
-  const answeredCount = Object.keys(answers).length;
-
   return (
-    <div className="min-h-screen p-4" style={{ background: "linear-gradient(135deg, #f0e6ff 0%, #e0ecff 100%)", color: "#1a1a2e" }}>
-      <div className="max-w-2xl mx-auto">
-        {/* Progress */}
-        <div className="p-4 mb-6 sticky top-4 z-10" style={{ background: "#fff", borderRadius: 12, boxShadow: "0 4px 16px rgba(0,0,0,0.1)" }}>
-          <div className="flex justify-between items-center mb-2">
-            <span className="font-semibold" style={{ color: "#5b21b6" }}>
-              {name} — Bài Kiểm Tra Bài 1
-            </span>
-            <span className="text-sm" style={{ color: "#888" }}>
-              {answeredCount}/10 câu
-            </span>
-          </div>
-          <div className="w-full h-2" style={{ background: "#e5e7eb", borderRadius: 999 }}>
-            <div
-              className="h-2 transition-all duration-300"
-              style={{ width: `${(answeredCount / 10) * 100}%`, background: "#7c3aed", borderRadius: 999 }}
-            />
-          </div>
-        </div>
-
-        {/* Questions */}
-        {questions.map((q) => {
-          const answered = answers[q.id] !== undefined;
-          const isCorrect = answered && answers[q.id] === q.correct;
-
-          return (
-            <div
-              key={q.id}
-              className="p-5 mb-4 transition"
-              style={{
-                background: "#fff",
-                borderRadius: 12,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                border: `2px solid ${answered ? (isCorrect ? "#86efac" : "#fca5a5") : "transparent"}`,
-              }}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <p className="font-semibold" style={{ color: "#1f2937" }}>
-                  <span
-                    className="inline-block text-center text-sm mr-2"
-                    style={{ background: "#ede9fe", color: "#6d28d9", borderRadius: 999, width: 28, height: 28, lineHeight: "28px" }}
-                  >
-                    {q.id}
-                  </span>
-                  {q.question}
-                </p>
-                {answered && (
-                  <span className="text-lg ml-2 flex-shrink-0">{isCorrect ? "✅" : "❌"}</span>
-                )}
-              </div>
-              <div className="space-y-2">
-                {q.options.map((opt, i) => {
-                  const isSelected = answers[q.id] === i;
-                  let optStyle: React.CSSProperties = { background: "#f9fafb", border: "2px solid transparent" };
-
-                  if (answered) {
-                    if (isSelected && isCorrect) {
-                      optStyle = { background: "#dcfce7", border: "2px solid #86efac" };
-                    } else if (isSelected && !isCorrect) {
-                      optStyle = { background: "#fee2e2", border: "2px solid #fca5a5" };
-                    } else {
-                      optStyle = { background: "#f9fafb", border: "2px solid transparent", opacity: 0.5 };
-                    }
-                  } else if (isSelected) {
-                    optStyle = { background: "#ede9fe", border: "2px solid #a78bfa" };
-                  }
-
-                  return (
-                    <label
-                      key={i}
-                      className="flex items-center gap-3 p-3 transition"
-                      style={{ borderRadius: 10, cursor: answered ? "default" : "pointer", ...optStyle }}
-                    >
-                      <input
-                        type="radio"
-                        name={`q${q.id}`}
-                        checked={isSelected}
-                        disabled={answered}
-                        onChange={() =>
-                          setAnswers((prev) => ({ ...prev, [q.id]: i }))
-                        }
-                        className="w-4 h-4"
-                        style={{ accentColor: "#7c3aed" }}
-                      />
-                      <span className="text-sm" style={{ color: "#374151" }}>
-                        <strong className="mr-1" style={{ color: "#7c3aed" }}>
-                          {String.fromCharCode(65 + i)}.
-                        </strong>
-                        {opt}
-                      </span>
-                    </label>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-
-        {/* Submit */}
-        <div className="text-center pb-8">
-          <button
-            onClick={() => answeredCount === 10 && handleSubmit()}
-            disabled={answeredCount < 10}
-            className="px-8 py-4 font-bold transition text-lg"
-            style={{
-              background: answeredCount < 10 ? "#ccc" : "#7c3aed",
-              color: "#fff",
-              borderRadius: 12,
-              cursor: answeredCount < 10 ? "not-allowed" : "pointer",
-              boxShadow: answeredCount < 10 ? "none" : "0 4px 16px rgba(124,58,237,0.3)",
-            }}
-          >
-            {answeredCount < 10
-              ? `Còn ${10 - answeredCount} câu chưa trả lời`
-              : "Nộp Bài"}
-          </button>
-        </div>
-      </div>
-    </div>
+    <QuizTemplate
+      title="Bài Kiểm Tra — Bài 1"
+      subtitle="Giải Mã Các Khái Niệm Về AI Cho Dân Non-Tech"
+      lessonNumber={1}
+      questions={questions}
+      passScore={7}
+      nextLesson="Bài 2: Prompt Engineering"
+      apiEndpoint="/api/quiz-ai-bai-1"
+    />
   );
 }
