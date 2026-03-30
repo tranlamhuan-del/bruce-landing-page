@@ -9,6 +9,7 @@ export default function Contact() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [interest, setInterest] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
 
@@ -33,6 +34,7 @@ export default function Contact() {
             name,
             email,
             message,
+            interest,
             time: now,
           }),
         }
@@ -145,6 +147,22 @@ export default function Contact() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
+                    Quan tâm về
+                  </label>
+                  <select
+                    className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary px-0 py-2 transition-all font-[family-name:var(--font-body)] text-on-surface outline-none"
+                    value={interest}
+                    onChange={(e) => setInterest(e.target.value)}
+                    required
+                  >
+                    <option value="" disabled>Chọn chủ đề...</option>
+                    <option value="Muốn trao đổi ngay">Muốn trao đổi ngay</option>
+                    <option value="Đang tìm hiểu">Đang tìm hiểu</option>
+                    <option value="Chỉ hỏi thăm">Chỉ hỏi thăm</option>
+                  </select>
                 </div>
                 <div className="space-y-2">
                   <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
