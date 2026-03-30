@@ -147,7 +147,7 @@ const questions: Question[] = [
 
 const PASS_SCORE = 7;
 const APPS_SCRIPT_URL =
-  "PENDING_URL";
+  "https://script.google.com/macros/s/AKfycbwb1NsQIORoV6ITeBBt2nIXdd58h6N7mtvIXW4DILjXDddr78KQI43NLQ0OJJQlPMOG/exec";
 
 export default function QuizBai2() {
   const [answers, setAnswers] = useState<Record<number, number>>({});
