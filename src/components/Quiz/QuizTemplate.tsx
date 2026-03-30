@@ -76,7 +76,7 @@ export default function QuizTemplate({
             <div className="glass max-w-lg w-full p-12 text-center border border-outline-variant/30 rounded-xl">
               <div className="w-16 h-16 rounded-full bg-primary/15 flex items-center justify-center mx-auto mb-6">
                 <MaterialIcon
-                  name="quiz"
+                  name="school"
                   className="text-primary text-3xl"
                 />
               </div>
