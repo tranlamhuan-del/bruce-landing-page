@@ -1,10 +1,36 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import FadeIn from "../ui/FadeIn";
 import MaterialIcon from "../ui/MaterialIcon";
 
 export default function Contact() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !email || !message) return;
+
+    setSending(true);
+    try {
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      setSent(true);
+    } catch {
+      // silent fail
+    } finally {
+      setSending(false);
+    }
+  };
+
   return (
     <section className="py-32 px-8 max-w-7xl mx-auto relative" id="contact">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
@@ -68,46 +94,68 @@ export default function Contact() {
 
         <FadeIn delay={0.3} direction="right">
           <div className="glass p-12 border border-outline-variant/30 rounded-xl">
-            <form className="space-y-8">
-              <div className="space-y-2">
-                <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
-                  Tên
-                </label>
-                <input
-                  className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary px-0 py-2 transition-all font-[family-name:var(--font-body)] text-on-surface outline-none"
-                  placeholder="Tên bạn"
-                  type="text"
-                />
+            {sent ? (
+              <div className="text-center py-12 space-y-4">
+                <MaterialIcon name="check_circle" className="text-primary text-5xl" />
+                <p className="text-xl font-[family-name:var(--font-headline)] font-bold">
+                  Đã gửi!
+                </p>
+                <p className="text-on-surface-variant font-[family-name:var(--font-body)]">
+                  Cảm ơn bạn, tôi sẽ phản hồi sớm.
+                </p>
               </div>
-              <div className="space-y-2">
-                <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
-                  Email
-                </label>
-                <input
-                  className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary px-0 py-2 transition-all font-[family-name:var(--font-body)] text-on-surface outline-none"
-                  placeholder="email@domain.com"
-                  type="email"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
-                  Nhắn gì đi
-                </label>
-                <textarea
-                  className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary px-0 py-2 transition-all font-[family-name:var(--font-body)] text-on-surface resize-none outline-none"
-                  placeholder="Góp ý, hỏi thăm, hay chỉ chào một tiếng..."
-                  rows={4}
-                />
-              </div>
-              <motion.button
-                className="w-full py-4 bg-primary text-on-primary font-[family-name:var(--font-headline)] font-bold text-lg rounded-lg transition-all"
-                type="submit"
-                whileHover={{ scale: 1.02, filter: "brightness(1.1)" }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Gửi tin nhắn
-              </motion.button>
-            </form>
+            ) : (
+              <form className="space-y-8" onSubmit={handleSubmit}>
+                <div className="space-y-2">
+                  <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
+                    Tên
+                  </label>
+                  <input
+                    className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary px-0 py-2 transition-all font-[family-name:var(--font-body)] text-on-surface outline-none"
+                    placeholder="Tên bạn"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
+                    Email
+                  </label>
+                  <input
+                    className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary px-0 py-2 transition-all font-[family-name:var(--font-body)] text-on-surface outline-none"
+                    placeholder="email@domain.com"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
+                    Nhắn gì đi
+                  </label>
+                  <textarea
+                    className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary px-0 py-2 transition-all font-[family-name:var(--font-body)] text-on-surface resize-none outline-none"
+                    placeholder="Góp ý, hỏi thăm, hay chỉ chào một tiếng..."
+                    rows={4}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
+                  />
+                </div>
+                <motion.button
+                  className="w-full py-4 bg-primary text-on-primary font-[family-name:var(--font-headline)] font-bold text-lg rounded-lg transition-all disabled:opacity-50"
+                  type="submit"
+                  disabled={sending}
+                  whileHover={{ scale: 1.02, filter: "brightness(1.1)" }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {sending ? "Đang gửi..." : "Gửi tin nhắn"}
+                </motion.button>
+              </form>
+            )}
           </div>
         </FadeIn>
       </div>
