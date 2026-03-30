@@ -24,7 +24,10 @@ const portfolioItems = [
     title: "Khóa AI cho bạn bè",
     description:
       "Tự học rồi chia sẻ lại — từ AI căn bản đến prompt engineering. Có quiz, có bài tập, có hỏi đáp. Ai cũng học được.",
-    link: "/quiz/ai-bai-1",
+    links: [
+      { href: "/quiz/ai-bai-1", label: "Bài 1: AI Căn bản" },
+      { href: "/quiz/ai-bai-2", label: "Bài 2: Prompt Engineering" },
+    ],
   },
   {
     image:
@@ -92,13 +95,18 @@ export default function Portfolio() {
                 <p className="text-on-surface-variant font-[family-name:var(--font-body)] text-sm leading-relaxed">
                   {item.description}
                 </p>
-                {item.link && (
-                  <a
-                    href={item.link}
-                    className="inline-block text-primary font-[family-name:var(--font-label)] text-xs uppercase tracking-widest hover:tracking-[0.2em] transition-all"
-                  >
-                    Làm quiz thử →
-                  </a>
+                {item.links && (
+                  <div className="flex flex-col gap-2">
+                    {item.links.map((link) => (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        className="inline-block text-primary font-[family-name:var(--font-label)] text-xs uppercase tracking-widest hover:tracking-[0.2em] transition-all"
+                      >
+                        {link.label} →
+                      </a>
+                    ))}
+                  </div>
                 )}
               </motion.div>
             </FadeIn>
