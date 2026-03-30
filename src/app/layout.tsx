@@ -15,9 +15,18 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Bruce Tran — Logistics · AI · Cuộc sống",
+  title: "Bruce Tran — Quản trị · Đầu tư · AI · Cuộc sống",
   description:
-    "Trang cá nhân của Bruce Tran — chia sẻ hành trình từ logistics đến AI, sách hay, và những thử nghiệm thú vị.",
+    "Trang cá nhân của Bruce Tran — chia sẻ hành trình hơn 20 năm trong logistics và quản lý, đầu tư, AI, sách hay, và cuộc sống.",
+  openGraph: {
+    title: "Bruce Tran — Quản trị · Đầu tư · AI · Cuộc sống",
+    description:
+      "Ghi lại hành trình, chia sẻ với bạn bè — quản trị, đầu tư, AI, sách hay, chạy bộ, âm nhạc.",
+    url: "https://www.tranlamhuan.vn",
+    siteName: "Bruce Tran",
+    locale: "vi_VN",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
