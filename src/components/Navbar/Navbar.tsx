@@ -5,11 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import Logo from "../ui/Logo";
 
 const navLinks = [
-  { href: "#about", label: "About" },
-  { href: "#experience", label: "Experience" },
-  { href: "#ai-journey", label: "AI Journey" },
-  { href: "#portfolio", label: "Portfolio" },
-  { href: "#contact", label: "Contact" },
+  { href: "#about", label: "Về tôi" },
+  { href: "#journey", label: "Hành trình" },
+  { href: "#projects", label: "Dự án" },
+  { href: "#books", label: "Sách hay" },
+  { href: "#contact", label: "Liên hệ" },
 ];
 
 export default function Navbar() {
@@ -26,7 +26,7 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 border-b border-outline-variant/20 ${
         scrolled
-          ? "bg-surface/80 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,229,255,0.08)]"
+          ? "bg-surface/80 backdrop-blur-xl shadow-sm"
           : "bg-surface/60 backdrop-blur-xl"
       }`}
     >
@@ -58,11 +58,11 @@ export default function Navbar() {
 
         <motion.a
           href="#contact"
-          className="hidden md:block bg-primary-fixed text-on-primary-fixed px-6 py-2 rounded font-[family-name:var(--font-headline)] font-bold active:scale-90 transition-transform"
+          className="hidden md:block text-on-surface-variant hover:text-primary transition-colors font-[family-name:var(--font-headline)] font-bold tracking-tighter"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          Connect
+          Kết nối
         </motion.a>
 
         <button

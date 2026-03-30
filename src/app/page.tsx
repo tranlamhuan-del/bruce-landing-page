@@ -3,6 +3,7 @@ import Hero from "@/components/Hero/Hero";
 import About from "@/components/About/About";
 import Expertise from "@/components/Expertise/Expertise";
 import Portfolio from "@/components/Portfolio/Portfolio";
+import BookCorner from "@/components/BookCorner/BookCorner";
 import Contact from "@/components/Contact/Contact";
 import Footer from "@/components/Footer/Footer";
 import Chatbot from "@/components/Chatbot/Chatbot";
@@ -16,6 +17,7 @@ export default function Home() {
         <About />
         <Expertise />
         <Portfolio />
+        <BookCorner />
         <Contact />
       </main>
       <Footer />

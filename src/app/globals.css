@@ -1,63 +1,74 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-surface: #0e0e0e;
-  --color-surface-dim: #0e0e0e;
-  --color-surface-bright: #2c2c2c;
-  --color-surface-container: #1a1919;
-  --color-surface-container-low: #131313;
-  --color-surface-container-high: #201f1f;
-  --color-surface-container-highest: #262626;
-  --color-surface-container-lowest: #000000;
-  --color-surface-variant: #262626;
-  --color-surface-tint: #8ff5ff;
+  /* ── Scandinavian Light Theme ── */
 
-  --color-primary: #8ff5ff;
-  --color-primary-dim: #00deec;
-  --color-primary-fixed: #00eefc;
-  --color-primary-fixed-dim: #00deec;
-  --color-primary-container: #00eefc;
-  --color-on-primary: #005d63;
-  --color-on-primary-fixed: #003f43;
-  --color-on-primary-container: #005359;
-  --color-on-primary-fixed-variant: #005e64;
-  --color-inverse-primary: #006a71;
+  /* Surfaces — warm off-whites & light grays */
+  --color-surface: #F5F3EF;
+  --color-surface-dim: #EBE8E2;
+  --color-surface-bright: #FFFFFF;
+  --color-surface-container: #FFFFFF;
+  --color-surface-container-low: #F0EDE8;
+  --color-surface-container-high: #E8E4DE;
+  --color-surface-container-highest: #DDD9D2;
+  --color-surface-container-lowest: #FAFAF8;
+  --color-surface-variant: #E8E4DE;
+  --color-surface-tint: #5B8BA0;
 
-  --color-secondary: #c3f400;
-  --color-secondary-dim: #b7e500;
-  --color-secondary-fixed: #c3f400;
-  --color-secondary-fixed-dim: #b7e500;
-  --color-secondary-container: #506600;
-  --color-on-secondary: #455900;
-  --color-on-secondary-fixed: #354500;
-  --color-on-secondary-container: #efffbc;
-  --color-on-secondary-fixed-variant: #4e6300;
+  /* Primary — muted sky blue (Scandinavian) */
+  --color-primary: #5B8BA0;
+  --color-primary-dim: #4A7A8F;
+  --color-primary-fixed: #5B8BA0;
+  --color-primary-fixed-dim: #4A7A8F;
+  --color-primary-container: #D6EAF2;
+  --color-on-primary: #FFFFFF;
+  --color-on-primary-fixed: #FFFFFF;
+  --color-on-primary-container: #2C5F73;
+  --color-on-primary-fixed-variant: #3A6B7E;
+  --color-inverse-primary: #A3C9D9;
 
-  --color-tertiary: #70aaff;
-  --color-tertiary-dim: #5c9ffc;
-  --color-tertiary-fixed: #80b2ff;
-  --color-tertiary-fixed-dim: #65a4ff;
-  --color-tertiary-container: #599cf9;
-  --color-on-tertiary: #002a55;
-  --color-on-tertiary-fixed: #001835;
-  --color-on-tertiary-container: #001d3f;
-  --color-on-tertiary-fixed-variant: #003971;
+  /* Secondary — warm oak / wood tone */
+  --color-secondary: #A68B6B;
+  --color-secondary-dim: #937A5C;
+  --color-secondary-fixed: #A68B6B;
+  --color-secondary-fixed-dim: #937A5C;
+  --color-secondary-container: #E8D9C5;
+  --color-on-secondary: #FFFFFF;
+  --color-on-secondary-fixed: #FFFFFF;
+  --color-on-secondary-container: #5C4A34;
+  --color-on-secondary-fixed-variant: #6B5640;
 
-  --color-on-surface: #ffffff;
-  --color-on-surface-variant: #adaaaa;
-  --color-on-background: #ffffff;
-  --color-background: #0e0e0e;
-  --color-inverse-surface: #fcf8f8;
-  --color-inverse-on-surface: #565554;
-  --color-outline: #777575;
-  --color-outline-variant: #494847;
+  /* Tertiary — soft sage green */
+  --color-tertiary: #7A9E8E;
+  --color-tertiary-dim: #6A8E7E;
+  --color-tertiary-fixed: #7A9E8E;
+  --color-tertiary-fixed-dim: #6A8E7E;
+  --color-tertiary-container: #D2E5DC;
+  --color-on-tertiary: #FFFFFF;
+  --color-on-tertiary-fixed: #FFFFFF;
+  --color-on-tertiary-container: #3D5A4D;
+  --color-on-tertiary-fixed-variant: #4A6858;
 
-  --color-error: #ff716c;
-  --color-error-dim: #d7383b;
-  --color-error-container: #9f0519;
-  --color-on-error: #490006;
-  --color-on-error-container: #ffa8a3;
+  /* Text — near black, warm */
+  --color-on-surface: #2C2C2C;
+  --color-on-surface-variant: #6B6560;
+  --color-on-background: #2C2C2C;
+  --color-background: #F5F3EF;
+  --color-inverse-surface: #2C2C2C;
+  --color-inverse-on-surface: #F5F3EF;
 
+  /* Outline */
+  --color-outline: #C5BFB8;
+  --color-outline-variant: #DDD9D2;
+
+  /* Error */
+  --color-error: #C75450;
+  --color-error-dim: #A8403C;
+  --color-error-container: #F5D5D3;
+  --color-on-error: #FFFFFF;
+  --color-on-error-container: #6B2220;
+
+  /* Typography */
   --font-headline: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
   --font-label: "Inter", sans-serif;
@@ -71,16 +82,12 @@ body {
 
 ::selection {
   background-color: var(--color-primary);
-  color: var(--color-on-primary-fixed);
+  color: white;
 }
 
 .glass {
-  background: rgba(44, 44, 44, 0.4);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
-}
-
-.neon-glow {
-  text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
 }
 
 /* Chatbot Markdown Styles */
@@ -107,18 +114,18 @@ body {
 }
 .chat-markdown strong {
   font-weight: 700;
-  color: #8ff5ff;
+  color: #4A7A8F;
 }
 .chat-markdown code {
-  background: #131313;
-  color: #c3f400;
+  background: #E8E4DE;
+  color: #5C4A34;
   padding: 0.15em 0.4em;
   border-radius: 4px;
   font-family: "Fira Code", "Consolas", monospace;
   font-size: 0.85em;
 }
 .chat-markdown pre {
-  background: #131313;
+  background: #E8E4DE;
   padding: 0.75rem 1rem;
   border-radius: 6px;
   overflow-x: auto;
@@ -129,14 +136,14 @@ body {
   padding: 0;
 }
 .chat-markdown blockquote {
-  border-left: 3px solid #494847;
+  border-left: 3px solid #C5BFB8;
   padding-left: 0.75rem;
   margin: 0.5rem 0;
-  color: #adaaaa;
+  color: #6B6560;
   font-style: italic;
 }
 .chat-markdown a {
-  color: #00eefc;
+  color: #5B8BA0;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -145,7 +152,7 @@ body {
   margin: 0.75rem 0 0.25rem;
 }
 
-/* Scrollbar for chat */
+/* Scrollbar */
 .scrollbar-thin::-webkit-scrollbar {
   width: 4px;
 }
@@ -153,9 +160,9 @@ body {
   background: transparent;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #494847;
+  background: #C5BFB8;
   border-radius: 2px;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: #777575;
+  background: #A8A29E;
 }

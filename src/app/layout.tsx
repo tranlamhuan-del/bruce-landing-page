@@ -15,9 +15,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "KINETIC — Logistics x AI Executive",
+  title: "Bruce Tran — Logistics · AI · Cuộc sống",
   description:
-    "Từ logistics đến AI — hành trình không ngừng học hỏi. 20 năm kinh nghiệm logistics, tư duy đầu tư giá trị, và công nghệ AI tiên tiến.",
+    "Trang cá nhân của Bruce Tran — chia sẻ hành trình từ logistics đến AI, sách hay, và những thử nghiệm thú vị.",
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className="dark">
+    <html lang="vi">
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"

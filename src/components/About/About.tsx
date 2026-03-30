@@ -13,7 +13,7 @@ export default function About() {
             <FadeIn>
               <div className="space-y-4">
                 <h2 className="text-sm font-[family-name:var(--font-label)] tracking-[0.3em] text-primary uppercase">
-                  Identity &amp; Heritage
+                  Về tôi
                 </h2>
                 <h3 className="text-5xl font-[family-name:var(--font-headline)] font-bold">
                   Logic. Dài hạn. Luôn tiến bộ.
@@ -24,17 +24,15 @@ export default function About() {
             <FadeIn delay={0.1}>
               <div className="space-y-6 text-on-surface-variant leading-relaxed text-lg font-[family-name:var(--font-body)]">
                 <p>
-                  Bắt đầu hành trình từ năm 2003 với việc sáng lập tập đoàn
-                  logistics, tôi đã dành hai thập kỷ để giải mã các bài toán phức
-                  tạp về chuỗi cung ứng và quản trị tài chính. Với vai trò Thành
-                  viên HĐQT và Giám đốc Tài chính, tôi luôn đặt sự bền vững và
-                  logic lên hàng đầu.
+                  Năm 2003, cùng 5 người bạn khởi nghiệp từ con số 0 — giờ đã hơn
+                  20 năm trong ngành logistics và quản lý. Hiện là Thành viên HĐQT
+                  và Phó Giám đốc phụ trách Tài chính &amp; Đầu tư của nhóm công ty.
                 </p>
                 <p>
-                  Tốt nghiệp Thạc sĩ Tài chính tại Đại học Massey (New Zealand) và
-                  là cựu sinh viên Đại học Kinh tế TP.HCM - khoa Ngoại Thương (UEH), nền tảng học thuật vững chắc
-                  giúp tôi tiếp cận công nghệ AI không chỉ như một công cụ, mà là
-                  một đòn bẩy chiến lược cho sự tăng trưởng dài hạn.
+                  Học Ngoại Thương (UEH), rồi lấy Thạc sĩ Tài chính tại Massey
+                  University (New Zealand). Nền tảng đó giúp tôi tiếp cận mọi thứ —
+                  từ quản trị đến AI — bằng tư duy hệ thống và logic, không chạy
+                  theo trend.
                 </p>
               </div>
             </FadeIn>
@@ -46,7 +44,7 @@ export default function About() {
                     20+
                   </h4>
                   <p className="text-on-surface-variant text-sm font-[family-name:var(--font-label)] uppercase">
-                    Years Excellence
+                    Năm trong logistics &amp; quản lý
                   </p>
                 </div>
                 <div>
@@ -54,7 +52,7 @@ export default function About() {
                     UEH
                   </h4>
                   <p className="text-on-surface-variant text-sm font-[family-name:var(--font-label)] uppercase">
-                    UEH & Massey Alumni
+                    &amp; Massey University, NZ
                   </p>
                 </div>
               </div>
@@ -64,31 +62,30 @@ export default function About() {
           {/* Right Column */}
           <div className="space-y-8">
             <FadeIn delay={0.2} direction="right">
-              <div className="glass p-8 space-y-6 border border-outline-variant/20">
+              <div className="glass p-8 space-y-6 border border-outline-variant/30 rounded-xl">
                 <h4 className="text-xl font-[family-name:var(--font-headline)] font-bold text-on-surface flex items-center gap-2">
                   <MaterialIcon name="psychology" className="text-secondary" />{" "}
-                  Philosophy
+                  Triết lý
                 </h4>
                 <ul className="space-y-4 font-[family-name:var(--font-body)] text-on-surface-variant">
                   <li className="flex items-start gap-3">
                     <span className="text-primary">•</span>
                     <span>
-                      Tư duy khắc kỷ (Stoicism) trong quản trị áp lực và biến động
-                      thị trường.
+                      Stoic — tập trung vào những gì kiểm soát được, không phí năng
+                      lượng vào thứ ngoài tầm tay.
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-primary">•</span>
                     <span>
-                      Đầu tư theo triết lý của Warren Buffett &amp; Charlie Munger:
-                      Tập trung vào giá trị thực.
+                      Đầu tư theo Buffett &amp; Munger — giá trị thực, dài hạn,
+                      không đầu cơ.
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-primary">•</span>
                     <span>
-                      &quot;Constant Improvement&quot; - Không ngừng tối ưu hóa mọi quy
-                      trình.
+                      Liên tục cải tiến — hôm nay phải tốt hơn hôm qua, dù chỉ 1%.
                     </span>
                   </li>
                 </ul>
@@ -96,42 +93,42 @@ export default function About() {
             </FadeIn>
 
             <FadeIn delay={0.3} direction="right">
-              <div className="glass p-8 space-y-6 border border-outline-variant/20">
+              <div className="glass p-8 space-y-6 border border-outline-variant/30 rounded-xl">
                 <h4 className="text-xl font-[family-name:var(--font-headline)] font-bold text-on-surface flex items-center gap-2">
                   <MaterialIcon name="favorite" className="text-secondary" />{" "}
-                  Personal Side
+                  Ngoài công việc
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm font-[family-name:var(--font-body)]">
                   <div className="space-y-2">
                     <p className="text-on-surface font-bold uppercase tracking-wider">
-                      Tình Yêu của Trẫm
+                      Gia đình
                     </p>
                     <p className="text-on-surface-variant">
-                      Người bạn đời, hậu phương vững chắc.
+                      Vợ (Tiên), hai con trai — Cà Rem đang học ở Úc, Cà Ri lớp 11.
                     </p>
                   </div>
                   <div className="space-y-2">
                     <p className="text-on-surface font-bold uppercase tracking-wider">
-                      Cà Rem &amp; Cà Ri
+                      Chạy bộ
                     </p>
                     <p className="text-on-surface-variant">
-                      Nguồn cảm hứng và năng lượng mỗi ngày.
+                      Đang tập cho Full Marathon đầu tiên — mục tiêu 2026.
                     </p>
                   </div>
                   <div className="space-y-2">
                     <p className="text-on-surface font-bold uppercase tracking-wider">
-                      Essential Reads
+                      Đọc sách
                     </p>
-                    <p className="text-on-surface-variant italic">
-                      &quot;Getting to Yes&quot;, &quot;Good to Great&quot;
+                    <p className="text-on-surface-variant">
+                      Getting to Yes, Good to Great, GTD — sách thay đổi cách nghĩ.
                     </p>
                   </div>
                   <div className="space-y-2">
                     <p className="text-on-surface font-bold uppercase tracking-wider">
-                      Music
+                      Âm nhạc
                     </p>
                     <p className="text-on-surface-variant">
-                      Band Đại Nam - Khi nghệ thuật gặp gỡ logic.
+                      Band Đại Nam — chơi đàn để cân bằng sau những con số.
                     </p>
                   </div>
                 </div>
