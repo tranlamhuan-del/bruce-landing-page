@@ -24,7 +24,7 @@ export default function Contact() {
         timeZone: "Asia/Ho_Chi_Minh",
       });
       await fetch(
-        "https://script.google.com/macros/s/AKfycbxrUBPFhhhCboMKS6JAjrCSFAI2c6Tbry1VeTmEBxoXAcUkfv-YJSZVXnpqj7AcfYy6/exec",
+        "https://script.google.com/macros/s/AKfycby1LGzgge4uQQcPmZvpAlOh3a4XmRwPMGDBh2Zhc9bRgxD62D92x0YIuNFzOhMw5Nsz/exec",
         {
           method: "POST",
           mode: "no-cors",
