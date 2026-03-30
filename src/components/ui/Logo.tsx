@@ -2,16 +2,16 @@
 
 export default function Logo({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
+    <div className={`flex items-center gap-1 ${className}`}>
       <svg
         width="36"
-        height="36"
-        viewBox="0 0 36 36"
+        height="44"
+        viewBox="0 0 36 44"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="shrink-0"
       >
-        {/* Rounded frame — Scandinavian minimal */}
+        {/* Rounded frame */}
         <rect
           x="1"
           y="1"
@@ -48,10 +48,11 @@ export default function Logo({ className = "" }: { className?: string }) {
         >
           T
         </text>
+        {/* 3 dots — Bruce, Tiên, Betty */}
+        <circle cx="11" cy="40" r="2" fill="currentColor" className="text-primary" />
+        <circle cx="18" cy="40" r="2" fill="currentColor" className="text-secondary" />
+        <circle cx="25" cy="40" r="2" fill="currentColor" className="text-tertiary" />
       </svg>
-      <span className="font-[family-name:var(--font-headline)] font-semibold text-on-surface text-sm tracking-wide">
-        Bruce Tran
-      </span>
     </div>
   );
 }
