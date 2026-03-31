@@ -27,6 +27,7 @@ const portfolioItems = [
     links: [
       { href: "/quiz/ai-bai-1", label: "Bài 1: AI Căn bản" },
       { href: "/quiz/ai-bai-2", label: "Bài 2: Prompt Engineering" },
+      { href: "/quiz/ai-bai-3", label: "Bài 3: Super Prompt & AI Agent" },
     ],
   },
   {
