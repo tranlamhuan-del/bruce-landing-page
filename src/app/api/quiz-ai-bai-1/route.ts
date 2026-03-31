@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycby1LGzgge4uQQcPmZvpAlOh3a4XmRwPMGDBh2Zhc9bRgxD62D92x0YIuNFzOhMw5Nsz/exec";
+  "https://script.google.com/macros/s/AKfycbxzwW_ppObqa5Y_Or98AWmtcpV1_pecpQ88EO2WN5N3ogvbnufqMDpn1DDjpvixsPla/exec";
 
 export async function POST(request: Request) {
   try {
@@ -26,6 +26,7 @@ export async function POST(request: Request) {
         score,
         passed: passed ? "Dat" : "Chua dat",
         time: now,
+        quiz: "bai-1",
       }),
     });
 
