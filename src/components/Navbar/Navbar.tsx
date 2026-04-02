@@ -5,11 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import Logo from "../ui/Logo";
 
 const navLinks = [
-  { href: "#about", label: "Về tôi" },
-  { href: "#journey", label: "Hành trình" },
-  { href: "#projects", label: "Dự án" },
-  { href: "#books", label: "Sách hay" },
-  { href: "#contact", label: "Liên hệ" },
+  { href: "/#about", label: "Về tôi" },
+  { href: "/#journey", label: "Hành trình" },
+  { href: "/#projects", label: "Dự án" },
+  { href: "/#books", label: "Sách hay" },
+  { href: "/#contact", label: "Liên hệ" },
 ];
 
 export default function Navbar() {
@@ -32,7 +32,7 @@ export default function Navbar() {
     >
       <div className="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
         <motion.a
-          href="#"
+          href="/"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
@@ -57,7 +57,7 @@ export default function Navbar() {
         </div>
 
         <motion.a
-          href="#contact"
+          href="/#contact"
           className="hidden md:block text-on-surface-variant hover:text-primary transition-colors font-[family-name:var(--font-headline)] font-bold tracking-tighter"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
