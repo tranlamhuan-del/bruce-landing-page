@@ -147,7 +147,7 @@ export default function QuizBai2() {
       lessonNumber={2}
       questions={questions}
       passScore={7}
-      nextLesson="Bài 3: Super Prompt, Meta Prompt & AI Agent"
+      nextLesson="Bài 2B: Context, Context & Context"
       apiEndpoint="/api/quiz-ai-bai-2"
     />
   );

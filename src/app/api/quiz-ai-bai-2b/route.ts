@@ -16,7 +16,6 @@ export async function POST(request: Request) {
       timeZone: "Asia/Ho_Chi_Minh",
     });
 
-    // Save to Google Sheet via Apps Script
     await fetch(APPS_SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -26,7 +25,7 @@ export async function POST(request: Request) {
         score,
         passed: passed ? "Dat" : "Chua dat",
         time: now,
-        quiz: "bai-1",
+        quiz: "bai-2b",
       }),
     });
 
