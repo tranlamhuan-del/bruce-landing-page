@@ -38,6 +38,7 @@ export default function QuizTemplate({
   const [submitted, setSubmitted] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [lang, setLang] = useState<"vi" | "en">("vi");
   const [started, setStarted] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -58,7 +59,7 @@ export default function QuizTemplate({
       await fetch(apiEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, score: s, passed: p, answers }),
+        body: JSON.stringify({ name, email, score: s, passed: p, lang, answers }),
       });
     } catch {
       // silent fail
@@ -115,6 +116,19 @@ export default function QuizTemplate({
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary px-0 py-2 transition-all font-[family-name:var(--font-body)] text-on-surface outline-none"
                   />
+                </div>
+                <div className="space-y-2 text-left">
+                  <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
+                    Ngôn ngữ slides
+                  </label>
+                  <select
+                    value={lang}
+                    onChange={(e) => setLang(e.target.value as "vi" | "en")}
+                    className="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary px-0 py-2 transition-all font-[family-name:var(--font-body)] text-on-surface outline-none cursor-pointer"
+                  >
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="en">English</option>
+                  </select>
                 </div>
               </div>
 

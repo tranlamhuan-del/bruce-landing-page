@@ -6,7 +6,7 @@ const APPS_SCRIPT_URL =
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, score, passed } = body;
+    const { name, email, score, passed, lang } = body;
 
     if (!name || !email || score === undefined) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -26,6 +26,7 @@ export async function POST(request: Request) {
         passed: passed ? "Dat" : "Chua dat",
         time: now,
         quiz: "bai-2",
+        lang: lang || "vi",
       }),
     });
 
