@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Dev/Bruce_Personal_AI/**)",
+      "mcp__gdocs__listSpreadsheets",
+      "mcp__gdocs__getSpreadsheetInfo",
+      "mcp__gdocs__renameFile",
+      "mcp__gdocs__addSheet",
+      "mcp__gdocs__renameSheet",
+      "mcp__gdocs__writeSpreadsheet"
+    ]
+  }
+}
