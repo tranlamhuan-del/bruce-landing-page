@@ -10,9 +10,12 @@ import MaterialIcon from "../ui/MaterialIcon";
 export interface Question {
   id: number;
   question: string;
+  questionEn?: string;
   options: string[];
+  optionsEn?: string[];
   correct: number;
   explanation: string;
+  explanationEn?: string;
 }
 
 interface QuizTemplateProps {
@@ -24,6 +27,59 @@ interface QuizTemplateProps {
   nextLesson?: string;
   apiEndpoint: string;
 }
+
+const UI = {
+  vi: {
+    lesson: "Bài",
+    quiz: "câu trắc nghiệm",
+    pass: "Đạt",
+    noTimeLimit: "Không giới hạn thời gian",
+    name: "Tên",
+    namePlaceholder: "Nhập tên của bạn...",
+    email: "Email",
+    slidesLang: "Ngôn ngữ slides",
+    vietnamese: "Tiếng Việt",
+    english: "English",
+    start: "Bắt Đầu Làm Bài",
+    questions: "câu",
+    submit: "Nộp Bài",
+    submitting: "Đang nộp...",
+    remaining: (n: number) => `Còn ${n} câu chưa trả lời`,
+    excellent: (name: string) => `Xuất sắc, ${name}!`,
+    passed: "Bạn đã vượt qua!",
+    readyFor: (next: string) => `Sẵn sàng cho ${next}!`,
+    home: "Về trang chủ",
+    notPassed: (name: string) => `Chưa đạt, ${name}`,
+    needScore: (pass: number, total: number) => `Cần đạt ${pass}/${total} để mở khóa bài tiếp theo.`,
+    reviewAndRetry: "Xem lại nội dung bài học rồi quay lại làm bài kiểm tra sau nhé!",
+    retry: "Làm lại",
+  },
+  en: {
+    lesson: "Lesson",
+    quiz: "questions",
+    pass: "Pass",
+    noTimeLimit: "No time limit",
+    name: "Name",
+    namePlaceholder: "Enter your name...",
+    email: "Email",
+    slidesLang: "Slides language",
+    vietnamese: "Tiếng Việt",
+    english: "English",
+    start: "Start Quiz",
+    questions: "questions",
+    submit: "Submit",
+    submitting: "Submitting...",
+    remaining: (n: number) => `${n} questions remaining`,
+    excellent: (name: string) => `Excellent, ${name}!`,
+    passed: "You passed!",
+    readyFor: (next: string) => `Ready for ${next}!`,
+    home: "Back to Home",
+    notPassed: (name: string) => `Not yet, ${name}`,
+    needScore: (pass: number, total: number) => `Need ${pass}/${total} to unlock the next lesson.`,
+    reviewAndRetry: "Review the lesson content and come back to try again!",
+    retry: "Try Again",
+  },
+};
 
 export default function QuizTemplate({
   title,
@@ -41,6 +97,11 @@ export default function QuizTemplate({
   const [lang, setLang] = useState<"vi" | "en">("vi");
   const [started, setStarted] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  const t = UI[lang];
+  const qText = (q: Question) => (lang === "en" && q.questionEn) ? q.questionEn : q.question;
+  const qOpts = (q: Question) => (lang === "en" && q.optionsEn) ? q.optionsEn : q.options;
+  const qExpl = (q: Question) => (lang === "en" && q.explanationEn) ? q.explanationEn : q.explanation;
 
   const total = questions.length;
   const calcScore = () =>
@@ -82,24 +143,24 @@ export default function QuizTemplate({
                 />
               </div>
               <h1 className="text-3xl font-[family-name:var(--font-headline)] font-bold mb-2 text-on-surface">
-                Bài {lessonNumber}
+                {t.lesson} {lessonNumber}
               </h1>
               <p className="text-on-surface-variant font-[family-name:var(--font-body)] mb-1">
                 {subtitle}
               </p>
               <p className="text-sm text-on-surface-variant/70 font-[family-name:var(--font-label)] mb-8">
-                {total} câu trắc nghiệm &middot; Đạt: {passScore}/{total}{" "}
-                &middot; Không giới hạn thời gian
+                {total} {t.quiz} &middot; {t.pass}: {passScore}/{total}{" "}
+                &middot; {t.noTimeLimit}
               </p>
 
               <div className="space-y-4 mb-8">
                 <div className="space-y-2 text-left">
                   <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
-                    Tên
+                    {t.name}
                   </label>
                   <input
                     type="text"
-                    placeholder="Nhập tên của bạn..."
+                    placeholder={t.namePlaceholder}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary px-0 py-2 transition-all font-[family-name:var(--font-body)] text-on-surface outline-none"
@@ -107,7 +168,7 @@ export default function QuizTemplate({
                 </div>
                 <div className="space-y-2 text-left">
                   <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
-                    Email
+                    {t.email}
                   </label>
                   <input
                     type="email"
@@ -119,7 +180,7 @@ export default function QuizTemplate({
                 </div>
                 <div className="space-y-2 text-left">
                   <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
-                    Ngôn ngữ slides
+                    {t.slidesLang}
                   </label>
                   <select
                     value={lang}
@@ -143,7 +204,7 @@ export default function QuizTemplate({
                   name.trim() && email.trim() ? { scale: 0.98 } : {}
                 }
               >
-                Bắt Đầu Làm Bài
+                {t.start}
               </motion.button>
             </div>
           </FadeIn>
@@ -170,20 +231,20 @@ export default function QuizTemplate({
                     />
                   </div>
                   <h1 className="text-3xl font-[family-name:var(--font-headline)] font-bold mb-2 text-on-surface">
-                    Xuất sắc, {name}!
+                    {t.excellent(name)}
                   </h1>
                   <div className="text-6xl font-[family-name:var(--font-headline)] font-bold my-6 text-tertiary">
                     {score}/{total}
                   </div>
                   <p className="text-on-surface-variant font-[family-name:var(--font-body)] mb-8">
-                    Bạn đã vượt qua!{" "}
-                    {nextLesson && `Sẵn sàng cho ${nextLesson}!`}
+                    {t.passed}{" "}
+                    {nextLesson && t.readyFor(nextLesson)}
                   </p>
                   <a
                     href="/"
                     className="inline-block bg-primary text-on-primary px-8 py-3 font-[family-name:var(--font-headline)] font-bold rounded-lg hover:brightness-110 transition-all"
                   >
-                    Về trang chủ
+                    {t.home}
                   </a>
                 </>
               ) : (
@@ -195,17 +256,16 @@ export default function QuizTemplate({
                     />
                   </div>
                   <h1 className="text-3xl font-[family-name:var(--font-headline)] font-bold mb-2 text-on-surface">
-                    Chưa đạt, {name}
+                    {t.notPassed(name)}
                   </h1>
                   <div className="text-6xl font-[family-name:var(--font-headline)] font-bold my-6 text-error">
                     {score}/{total}
                   </div>
                   <p className="text-on-surface-variant font-[family-name:var(--font-body)] mb-2">
-                    Cần đạt {passScore}/{total} để mở khóa bài tiếp theo.
+                    {t.needScore(passScore, total)}
                   </p>
                   <p className="text-on-surface-variant font-[family-name:var(--font-body)] mb-8">
-                    Xem lại nội dung bài học rồi quay lại làm bài kiểm tra sau
-                    nhé!
+                    {t.reviewAndRetry}
                   </p>
                   <div className="flex gap-4 justify-center">
                     <button
@@ -215,13 +275,13 @@ export default function QuizTemplate({
                       }}
                       className="border border-outline text-on-surface px-8 py-3 font-[family-name:var(--font-headline)] font-bold rounded-lg hover:bg-surface-container-high transition-all"
                     >
-                      Làm lại
+                      {t.retry}
                     </button>
                     <a
                       href="/"
                       className="bg-primary text-on-primary px-8 py-3 font-[family-name:var(--font-headline)] font-bold rounded-lg hover:brightness-110 transition-all"
                     >
-                      Về trang chủ
+                      {t.home}
                     </a>
                   </div>
                 </>
@@ -244,10 +304,10 @@ export default function QuizTemplate({
           <div className="glass p-4 mb-8 sticky top-20 z-10 border border-outline-variant/30 rounded-xl">
             <div className="flex justify-between items-center mb-2">
               <span className="font-[family-name:var(--font-headline)] font-bold text-on-surface">
-                {name} — Bài {lessonNumber}
+                {name} — {t.lesson} {lessonNumber}
               </span>
               <span className="text-sm font-[family-name:var(--font-label)] text-on-surface-variant">
-                {answeredCount}/{total} câu
+                {answeredCount}/{total} {t.questions}
               </span>
             </div>
             <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
@@ -284,7 +344,7 @@ export default function QuizTemplate({
                       <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary/15 text-primary text-sm font-bold mr-2 shrink-0">
                         {q.id}
                       </span>
-                      {q.question}
+                      {qText(q)}
                     </p>
                     {answered && (
                       <span className="ml-2 shrink-0">
@@ -300,7 +360,7 @@ export default function QuizTemplate({
 
                   {/* Options */}
                   <div className="space-y-2">
-                    {q.options.map((opt, i) => {
+                    {qOpts(q).map((opt, i) => {
                       const isSelected = answers[q.id] === i;
                       const isCorrectOption = i === q.correct;
 
@@ -371,7 +431,7 @@ export default function QuizTemplate({
                             name="lightbulb"
                             className="text-secondary text-base mr-1 align-middle"
                           />
-                          {q.explanation}
+                          {qExpl(q)}
                         </p>
                       </motion.div>
                     )}
@@ -396,10 +456,10 @@ export default function QuizTemplate({
                 }
               >
                 {saving
-                  ? "Đang nộp..."
+                  ? t.submitting
                   : answeredCount < total
-                    ? `Còn ${total - answeredCount} câu chưa trả lời`
-                    : "Nộp Bài"}
+                    ? t.remaining(total - answeredCount)
+                    : t.submit}
               </motion.button>
             </div>
           </FadeIn>
