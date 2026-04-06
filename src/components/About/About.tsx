@@ -104,7 +104,7 @@ export default function About() {
                       Gia đình
                     </p>
                     <p className="text-on-surface-variant">
-                      Vợ (Tiên), hai con trai — Cà Rem đang học ở Úc, Cà Ri lớp 11.
+                      Vợ (Tiên), hai con trai — Cà Rem đang học ở Úc, Cà Ri lớp 11. Đại gia đình ba thế hệ là nguồn gốc và nền tảng — truyền thống mỗi Tết Âm lịch cả nhà cùng đi du lịch.
                     </p>
                   </div>
                   <div className="space-y-2">
