@@ -1,6 +1,7 @@
 import { google, type sheets_v4 } from 'googleapis';
 
-const SHEET_ID = process.env.BAND_SHEET_ID!;
+// Sheet ID is safe to hardcode (not a secret - it's a public identifier)
+const SHEET_ID = process.env.BAND_SHEET_ID || '1kVWRYTLBFhzi53ybZRpu5SHDYzXN43s3RzF2DrAw9uk';
 
 let sheetsClient: sheets_v4.Sheets | null = null;
 
