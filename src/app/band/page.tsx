@@ -179,9 +179,12 @@ export default function BandDashboard() {
 
       {/* Tình hình đóng phí */}
       <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm">
-        <h3 className="text-sm font-semibold text-slate-700 mb-4">
+        <h3 className="text-sm font-semibold text-slate-700 mb-1">
           Tình hình đóng phí thành viên {parseInt(year) <= 2025 ? '(2024-2025 gộp)' : `(${year})`}
         </h3>
+        <p className="text-xs text-slate-400 mb-4">
+          Tính đến tháng hiện tại, mỗi TV đóng 1.000.000đ/tháng
+        </p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
