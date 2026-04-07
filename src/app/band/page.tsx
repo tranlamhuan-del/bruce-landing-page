@@ -213,15 +213,10 @@ export default function BandDashboard() {
                       )}
                       {isDu0 && (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
-                          Đủ
+                          Đã đóng đủ
                         </span>
                       )}
-                      {isThieu && m.daDong === 0 && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-500">
-                          Chưa đóng
-                        </span>
-                      )}
-                      {isThieu && m.daDong > 0 && (
+                      {isThieu && (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
                           Thiếu {formatFullVND(-du)}
                         </span>
