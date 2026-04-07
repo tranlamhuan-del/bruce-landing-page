@@ -18,4 +18,10 @@ Tất cả file liên quan đến landing page tranlamhuan.vn lưu trong folder:
   - Tabs: `Quiz Bai 1`, `Quiz Bai 2`, `Contact`
   - URL: https://docs.google.com/spreadsheets/d/1Nlh_bNRqCbdgNA4xNdZEObiQUHjJ1SGRwS66xWCTUPI
 
+- **Band Đại Nam - Quản lý Thu Chi** (Google Sheet)
+  - Sheet ID: `1kVWRYTLBFhzi53ybZRpu5SHDYzXN43s3RzF2DrAw9uk`
+  - Tabs: `GiaoDich`, `ThanhVien`, `DanhMuc`, `CaiDat`
+  - URL: https://docs.google.com/spreadsheets/d/1kVWRYTLBFhzi53ybZRpu5SHDYzXN43s3RzF2DrAw9uk
+  - 82 giao dịch lịch sử imported từ Excel (2024-2025)
+
 Khi tạo file mới cho project này (Sheet, Doc, etc.) → luôn đặt vào folder `tranlamhuan.vn` (ID ở trên).
