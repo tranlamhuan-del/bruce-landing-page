@@ -11,7 +11,7 @@ interface Message {
 export default function BandChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', text: 'Chào bạn! Tôi là trợ lý quản lý thu chi Band Đại Nam. Bạn có thể hỏi về tồn quỹ, giao dịch, hoặc nhập thu chi bằng cách mô tả. Gửi hình invoice để nhập nhanh!' },
+    { role: 'assistant', text: 'Chào anh/chị! Em là trợ lý thu chi Band Đại Nam. Anh/chị có thể hỏi em về tồn quỹ, giao dịch, hoặc nhập thu chi bằng cách mô tả. Gửi hình invoice để em nhập nhanh ạ!' },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
