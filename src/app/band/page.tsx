@@ -113,19 +113,14 @@ export default function BandDashboard() {
           <h3 className="text-sm font-semibold text-slate-700 mb-4">Cơ cấu Chi ({year})</h3>
           {data.coCauChi.length > 0 ? (
             <>
-              <ResponsiveContainer width="100%" height={200}>
+              <ResponsiveContainer width="100%" height={220}>
                 <PieChart>
                   <Pie
                     data={data.coCauChi}
                     cx="50%" cy="50%"
-                    innerRadius={40} outerRadius={80}
+                    innerRadius={50} outerRadius={85}
                     dataKey="value"
-                    label={(props) => {
-                      const name = String(props.name || '');
-                      const percent = Number(props.percent || 0);
-                      return `${name.replace('Chi ', '').substring(0, 10)} ${(percent * 100).toFixed(0)}%`;
-                    }}
-                    labelLine={false}
+                    label={false}
                   >
                     {data.coCauChi.map((_, i) => (
                       <Cell key={i} fill={COLORS[i % COLORS.length]} />
@@ -134,16 +129,23 @@ export default function BandDashboard() {
                   <Tooltip formatter={(v) => formatFullVND(Number(v))} />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="mt-2 space-y-1">
-                {data.coCauChi.map((item, i) => (
-                  <div key={item.name} className="flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
-                      <span className="text-slate-600 truncate max-w-[120px]">{item.name}</span>
+              <div className="mt-3 space-y-2">
+                {data.coCauChi.map((item, i) => {
+                  const total = data.coCauChi.reduce((s, c) => s + c.value, 0);
+                  const pct = total > 0 ? ((item.value / total) * 100).toFixed(0) : '0';
+                  return (
+                    <div key={item.name} className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
+                        <span className="text-slate-600 truncate">{item.name}</span>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0 ml-2">
+                        <span className="text-slate-400">{pct}%</span>
+                        <span className="text-slate-800 font-medium">{formatFullVND(item.value)}</span>
+                      </div>
                     </div>
-                    <span className="text-slate-800 font-medium">{formatFullVND(item.value)}</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </>
           ) : (
