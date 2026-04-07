@@ -28,7 +28,7 @@ const UI = {
     download: "Tải PDF",
     howItWorks: "Cách học",
     steps: [
-      "Đọc hết slides bài giảng bên trên",
+      "Đọc hết slides bài chia sẻ bên trên",
       "Làm bài kiểm tra ở nút bên dưới (10 câu trắc nghiệm)",
       "Nhớ điền đầy đủ Tên và Email trước khi bắt đầu",
       "Đạt 7/10 trở lên → Hệ thống tự động gửi bài tiếp theo vào email của bạn",
