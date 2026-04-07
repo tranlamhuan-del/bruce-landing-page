@@ -51,8 +51,7 @@ export default function BandDashboard() {
     return <div className="text-center py-20 text-slate-400">Đang tải dữ liệu...</div>;
   }
 
-  const summaryCards = [
-    { label: 'Tồn quỹ hiện tại', value: data.tonQuyCuoiKy, color: data.tonQuyCuoiKy >= 0 ? 'text-emerald-600' : 'text-red-600', bg: 'bg-emerald-50' },
+  const yearCards = [
     { label: `Tổng thu ${year}`, value: data.tongThu, color: 'text-blue-600', bg: 'bg-blue-50' },
     { label: `Tổng chi ${year}`, value: data.tongChi, color: 'text-orange-600', bg: 'bg-orange-50' },
     { label: `Thu - Chi ${year}`, value: data.tongThu - data.tongChi, color: data.tongThu - data.tongChi >= 0 ? 'text-emerald-600' : 'text-red-600', bg: 'bg-slate-50' },
@@ -74,9 +73,33 @@ export default function BandDashboard() {
         </select>
       </div>
 
-      {/* Summary cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {summaryCards.map((card) => (
+      {/* Balance hero card */}
+      <div className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-6 text-white shadow-lg">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div className="text-sm text-slate-300 font-medium mb-1">Số dư quỹ hiện tại</div>
+            <div className={`text-3xl md:text-4xl font-bold ${data.tonQuyCuoiKy >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+              {formatFullVND(data.tonQuyCuoiKy)}
+            </div>
+          </div>
+          <div className="flex gap-6 text-sm">
+            <div>
+              <div className="text-slate-400">Tồn đầu {year}</div>
+              <div className="text-lg font-semibold text-white">{formatFullVND(data.tonQuyDauKy)}</div>
+            </div>
+            <div className="border-l border-slate-600 pl-6">
+              <div className="text-slate-400">Biến động {year}</div>
+              <div className={`text-lg font-semibold ${data.tongThu - data.tongChi >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                {data.tongThu - data.tongChi >= 0 ? '+' : ''}{formatFullVND(data.tongThu - data.tongChi)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Year summary cards */}
+      <div className="grid grid-cols-3 gap-4">
+        {yearCards.map((card) => (
           <div key={card.label} className={`${card.bg} rounded-xl p-4 border border-slate-200`}>
             <div className="text-xs text-slate-500 font-medium mb-1">{card.label}</div>
             <div className={`text-lg md:text-xl font-bold ${card.color}`}>
