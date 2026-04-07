@@ -1,6 +1,6 @@
 import { google, type sheets_v4 } from 'googleapis';
+import { GOOGLE_CONFIG } from './google-config';
 
-// Sheet ID is safe to hardcode (not a secret - it's a public identifier)
 const SHEET_ID = process.env.BAND_SHEET_ID || '1kVWRYTLBFhzi53ybZRpu5SHDYzXN43s3RzF2DrAw9uk';
 
 let sheetsClient: sheets_v4.Sheets | null = null;
@@ -9,10 +9,10 @@ function getSheets(): sheets_v4.Sheets {
   if (sheetsClient) return sheetsClient;
 
   const auth = new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET
+    GOOGLE_CONFIG.clientId,
+    GOOGLE_CONFIG.clientSecret
   );
-  auth.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
+  auth.setCredentials({ refresh_token: GOOGLE_CONFIG.refreshToken });
 
   sheetsClient = google.sheets({ version: 'v4', auth });
   return sheetsClient;
