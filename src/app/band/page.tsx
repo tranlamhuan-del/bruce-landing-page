@@ -179,22 +179,60 @@ export default function BandDashboard() {
 
       {/* Tình hình đóng phí */}
       <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm">
-        <h3 className="text-sm font-semibold text-slate-700 mb-4">Tình hình đóng phí thành viên ({year})</h3>
-        {data.tinhHinhDongPhi.length > 0 ? (
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data.tinhHinhDongPhi} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={formatVND} />
-              <YAxis type="category" dataKey="ten" tick={{ fontSize: 12 }} width={90} />
-              <Tooltip formatter={(v) => formatFullVND(Number(v))} />
-              <Legend />
-              <Bar dataKey="daDong" name="Đã đóng" fill="#10b981" radius={[0, 4, 4, 0]} />
-              <Bar dataKey="conLai" name="Còn thiếu" fill="#fbbf24" radius={[0, 4, 4, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        ) : (
-          <div className="text-center py-10 text-slate-400">Chưa có dữ liệu</div>
-        )}
+        <h3 className="text-sm font-semibold text-slate-700 mb-4">
+          Tình hình đóng phí thành viên {parseInt(year) <= 2025 ? '(2024-2025 gộp)' : `(${year})`}
+        </h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-slate-200 bg-slate-50">
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">Thành viên</th>
+                <th className="text-right px-4 py-2.5 font-medium text-slate-600">Phải đóng</th>
+                <th className="text-right px-4 py-2.5 font-medium text-slate-600">Đã đóng</th>
+                <th className="text-right px-4 py-2.5 font-medium text-slate-600">Tình trạng</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.tinhHinhDongPhi.map((m) => {
+                const du = m.daDong - m.phaiDong;
+                const isDu = du > 0;
+                const isDu0 = du === 0;
+                const isThieu = du < 0;
+                return (
+                  <tr key={m.ten} className="border-b border-slate-100 hover:bg-slate-50">
+                    <td className="px-4 py-2.5 font-medium text-slate-800">{m.ten}</td>
+                    <td className="px-4 py-2.5 text-right text-slate-600">{formatFullVND(m.phaiDong)}</td>
+                    <td className={`px-4 py-2.5 text-right font-medium ${isDu ? 'text-emerald-600' : isThieu ? 'text-orange-600' : 'text-slate-800'}`}>
+                      {formatFullVND(m.daDong)}
+                    </td>
+                    <td className="px-4 py-2.5 text-right">
+                      {isDu && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
+                          Dư {formatFullVND(du)}
+                        </span>
+                      )}
+                      {isDu0 && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                          Đủ
+                        </span>
+                      )}
+                      {isThieu && m.daDong === 0 && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-500">
+                          Chưa đóng
+                        </span>
+                      )}
+                      {isThieu && m.daDong > 0 && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+                          Thiếu {formatFullVND(-du)}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Bank info */}
