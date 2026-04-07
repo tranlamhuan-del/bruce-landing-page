@@ -183,7 +183,7 @@ export default function BandDashboard() {
           Tình hình đóng phí thành viên {parseInt(year) <= 2025 ? '(2024-2025 gộp)' : `(${year})`}
         </h3>
         <p className="text-xs text-slate-400 mb-4">
-          Tính đến tháng hiện tại, mỗi TV đóng 1.000.000đ/tháng
+          Phí sinh hoạt: 1.000.000đ/TV/tháng. Thiếu/dư được tính tích lũy đến tháng hiện tại.
         </p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
