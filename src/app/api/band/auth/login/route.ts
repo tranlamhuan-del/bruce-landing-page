@@ -30,7 +30,8 @@ export async function POST(req: NextRequest) {
       user: { username: user.username, hoTen: user.hoTen, vaiTro: user.vaiTro },
     });
   } catch (error) {
-    console.error('Login error:', error);
-    return NextResponse.json({ error: 'Lỗi đăng nhập' }, { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('Login error:', msg, error);
+    return NextResponse.json({ error: `Lỗi đăng nhập: ${msg}` }, { status: 500 });
   }
 }
