@@ -21,25 +21,33 @@ interface LessonTemplateProps {
 const UI = {
   vi: {
     lesson: "Bài",
-    viewSlides: "Xem slides bài giảng",
     language: "Ngôn ngữ",
     vietnamese: "Tiếng Việt",
     english: "English",
     takeQuiz: "Làm Bài Kiểm Tra",
-    quizNote: "Hoàn thành quiz để mở khóa bài tiếp theo",
     download: "Tải PDF",
-    back: "Về trang chủ",
+    howItWorks: "Cách học",
+    steps: [
+      "Đọc hết slides bài giảng bên trên",
+      "Làm bài kiểm tra ở nút bên dưới (10 câu trắc nghiệm)",
+      "Nhớ điền đầy đủ Tên và Email trước khi bắt đầu",
+      "Đạt 7/10 trở lên → Hệ thống tự động gửi bài tiếp theo vào email của bạn",
+    ],
   },
   en: {
     lesson: "Lesson",
-    viewSlides: "View lesson slides",
     language: "Language",
     vietnamese: "Tiếng Việt",
     english: "English",
     takeQuiz: "Take Quiz",
-    quizNote: "Complete the quiz to unlock the next lesson",
     download: "Download PDF",
-    back: "Back to Home",
+    howItWorks: "How it works",
+    steps: [
+      "Read through the lesson slides above",
+      "Take the quiz below (10 multiple-choice questions)",
+      "Make sure to fill in your Name and Email before starting",
+      "Score 7/10 or higher → The system will automatically email you the next lesson",
+    ],
   },
 };
 
@@ -146,26 +154,41 @@ export default function LessonTemplate({
           </div>
         </FadeIn>
 
-        {/* Quiz CTA */}
+        {/* How it works + Quiz CTA */}
         <FadeIn delay={0.3}>
-          <div className="max-w-4xl mx-auto px-4 text-center">
+          <div className="max-w-4xl mx-auto px-4">
             <div className="glass border border-outline-variant/30 rounded-xl p-8">
-              <MaterialIcon
-                name="quiz"
-                className="text-primary text-4xl mb-4"
-              />
-              <h2 className="text-xl font-[family-name:var(--font-headline)] font-bold text-on-surface mb-2">
-                {t.takeQuiz}
-              </h2>
-              <p className="text-on-surface-variant font-[family-name:var(--font-body)] text-sm mb-6">
-                {t.quizNote}
-              </p>
-              <a
-                href={quizHref}
-                className="inline-block bg-primary text-on-primary px-8 py-3 font-[family-name:var(--font-headline)] font-bold rounded-lg hover:brightness-110 transition-all"
-              >
-                {t.takeQuiz} →
-              </a>
+              <div className="flex items-center gap-3 mb-6">
+                <MaterialIcon
+                  name="rocket_launch"
+                  className="text-primary text-3xl"
+                />
+                <h2 className="text-xl font-[family-name:var(--font-headline)] font-bold text-on-surface">
+                  {t.howItWorks}
+                </h2>
+              </div>
+              <div className="space-y-4 mb-8">
+                {t.steps.map((step, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center">
+                      <span className="text-primary font-[family-name:var(--font-headline)] font-bold text-sm">
+                        {i + 1}
+                      </span>
+                    </div>
+                    <p className="text-on-surface font-[family-name:var(--font-body)] text-sm leading-relaxed pt-1">
+                      {step}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="text-center">
+                <a
+                  href={quizHref}
+                  className="inline-block bg-primary text-on-primary px-10 py-4 font-[family-name:var(--font-headline)] font-bold text-lg rounded-lg hover:brightness-110 transition-all"
+                >
+                  {t.takeQuiz} →
+                </a>
+              </div>
             </div>
           </div>
         </FadeIn>
