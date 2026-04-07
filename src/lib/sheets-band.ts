@@ -272,11 +272,14 @@ export async function getDashboardData(nam?: string): Promise<DashboardData> {
       const phaiDong = 12_000_000;
       return { ten: m.ten, daDong, phaiDong, conLai: phaiDong - daDong };
     } else {
-      // 2026+: phí 1tr/tháng, tính riêng năm đang xem
-      const monthsToCount = yearNum === currentYear ? currentMonth : 12;
-      const phaiDong = m.phiHangThang * monthsToCount;
+      // 2026+: tích lũy từ T1/2026 đến tháng hiện tại (hoặc cuối năm đang xem)
+      // Phải đóng = 1tr × tổng số tháng từ T1/2026 đến cuối năm đang xem
+      const endMonth = yearNum === currentYear ? currentMonth : 12;
+      const totalMonths = (yearNum - 2026) * 12 + endMonth;
+      const phaiDong = m.phiHangThang * totalMonths;
+      // Đã đóng = tổng tất cả phí từ 2026 trở đi
       const daDong = allFees
-        .filter(t => t.thang.startsWith(year))
+        .filter(t => t.thang >= '2026-01')
         .reduce((sum, t) => sum + t.soTien, 0);
       return { ten: m.ten, daDong, phaiDong, conLai: phaiDong - daDong };
     }
