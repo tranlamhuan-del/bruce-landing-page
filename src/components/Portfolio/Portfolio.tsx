@@ -25,10 +25,10 @@ const portfolioItems = [
     description:
       "Tự học rồi chia sẻ lại — từ AI căn bản đến prompt engineering. Có quiz, có bài tập, có hỏi đáp. Ai cũng học được.",
     links: [
-      { href: "/quiz/ai-bai-1", label: "Bài 1: AI Căn bản" },
-      { href: "/quiz/ai-bai-2", label: "Bài 2: Prompt Engineering" },
-      { href: "/quiz/ai-bai-2b", label: "Bài 2B: Context" },
-      { href: "/quiz/ai-bai-3", label: "Bài 3: Super Prompt & AI Agent" },
+      { href: "/learn/ai-bai-1", label: "Bài 1: AI Căn bản" },
+      { href: "/learn/ai-bai-2", label: "Bài 2: Prompt Engineering" },
+      { href: "/quiz/ai-bai-2b", label: "Bài 2B: Context (Quiz)" },
+      { href: "/quiz/ai-bai-3", label: "Bài 3: Super Prompt & AI Agent (Quiz)" },
     ],
   },
   {
