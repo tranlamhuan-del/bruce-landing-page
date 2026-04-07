@@ -252,32 +252,34 @@ export async function getDashboardData(nam?: string): Promise<DashboardData> {
   }
   const coCauChi = Array.from(chiMap.entries()).map(([name, value]) => ({ name, value }));
 
-  // Tình hình đóng phí — tính tích lũy từ đầu đến hết năm đang xem
-  // Option 2: 12tr/người cho toàn bộ 2024-2025, 1tr/tháng từ 2026
+  // Tình hình đóng phí — tách rõ theo giai đoạn
+  // 2024-2025: gộp chung, phải đóng 12tr/người (Option 2)
+  // 2026+: 1tr/tháng, tính theo năm đang xem
   const yearNum = parseInt(year);
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
 
   const tinhHinhDongPhi = members.filter(m => m.trangThai === 'active').map(m => {
-    // Tổng đã đóng đến hết năm đang xem
-    const memberThu = allTx.filter(
+    const allFees = allTx.filter(
       t => t.thanhVien === m.ten && t.loai === 'Thu' && t.danhMuc === 'Thu phí hàng tháng'
-        && t.thang <= (yearNum === currentYear ? `${year}-${String(currentMonth).padStart(2, '0')}` : `${year}-12`)
     );
-    const daDong = memberThu.reduce((sum, t) => sum + t.soTien, 0);
 
-    // Phải đóng tích lũy
-    let phaiDong = 0;
     if (yearNum <= 2025) {
-      // 2024-2025: Option 2 = 12tr/người cho cả giai đoạn
-      phaiDong = 12_000_000;
+      // Xem 2024 hoặc 2025: hiển thị tình hình đóng phí gộp 2024-2025
+      const daDong = allFees
+        .filter(t => t.thang >= '2024-01' && t.thang <= '2025-12')
+        .reduce((sum, t) => sum + t.soTien, 0);
+      const phaiDong = 12_000_000;
+      return { ten: m.ten, daDong, phaiDong, conLai: phaiDong - daDong };
     } else {
-      // 2024-2025 base + 1tr/tháng từ T1/2026
-      const monthsIn2026 = yearNum === currentYear ? currentMonth : 12;
-      phaiDong = 12_000_000 + m.phiHangThang * monthsIn2026;
+      // 2026+: phí 1tr/tháng, tính riêng năm đang xem
+      const monthsToCount = yearNum === currentYear ? currentMonth : 12;
+      const phaiDong = m.phiHangThang * monthsToCount;
+      const daDong = allFees
+        .filter(t => t.thang.startsWith(year))
+        .reduce((sum, t) => sum + t.soTien, 0);
+      return { ten: m.ten, daDong, phaiDong, conLai: phaiDong - daDong };
     }
-
-    return { ten: m.ten, daDong, phaiDong, conLai: phaiDong - daDong };
   });
 
   // Tổng
