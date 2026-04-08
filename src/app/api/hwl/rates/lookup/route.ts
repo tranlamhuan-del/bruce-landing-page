@@ -6,6 +6,9 @@ import { logJob } from '@/lib/sheets-hwl';
 const SCRAPER_URL = process.env.HWL_SCRAPER_URL || 'http://localhost:3002';
 const SCRAPER_SECRET = process.env.HWL_SCRAPER_SECRET || 'dev-secret';
 
+// Vercel serverless max duration (free: 60s, pro: 300s)
+export const maxDuration = 120;
+
 export async function POST(req: NextRequest) {
   try {
     // Auth check
@@ -20,7 +23,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Thiếu thông tin: containerType, pol, pod' }, { status: 400 });
     }
 
-    // Call Railway scraper
+    // Call Mac Mini scraper (timeout 110s — scraper takes ~70s)
     const scraperRes = await fetch(`${SCRAPER_URL}/api/scrape`, {
       method: 'POST',
       headers: {
@@ -28,6 +31,7 @@ export async function POST(req: NextRequest) {
         'Authorization': `Bearer ${SCRAPER_SECRET}`,
       },
       body: JSON.stringify({ containerType, pol, pod }),
+      signal: AbortSignal.timeout(110000),
     });
 
     const scraperData = await scraperRes.json();
