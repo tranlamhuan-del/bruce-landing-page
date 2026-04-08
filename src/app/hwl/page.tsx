@@ -11,23 +11,28 @@ const CONTAINER_TYPES = [
   { value: '40RH', label: "40' Reefer High Cube" },
 ];
 
+// Gợi ý cảng phổ biến — user vẫn có thể gõ tự do bất kỳ cảng nào
 const POPULAR_PORTS = [
-  { value: 'Ho Chi Minh City', label: 'Ho Chi Minh City (VNSGN)' },
-  { value: 'Hai Phong', label: 'Hai Phong (VNHPH)' },
-  { value: 'Da Nang', label: 'Da Nang (VNDAD)' },
-  { value: 'Hamburg', label: 'Hamburg (DEHAM)' },
-  { value: 'Rotterdam', label: 'Rotterdam (NLRTM)' },
-  { value: 'Antwerp', label: 'Antwerp (BEANR)' },
-  { value: 'Los Angeles', label: 'Los Angeles (USLAX)' },
-  { value: 'Long Beach', label: 'Long Beach (USLGB)' },
-  { value: 'New York', label: 'New York (USNYC)' },
-  { value: 'Shanghai', label: 'Shanghai (CNSHA)' },
-  { value: 'Singapore', label: 'Singapore (SGSIN)' },
-  { value: 'Busan', label: 'Busan (KRPUS)' },
-  { value: 'Tokyo', label: 'Tokyo (JPTYO)' },
-  { value: 'Sydney', label: 'Sydney (AUSYD)' },
-  { value: 'Felixstowe', label: 'Felixstowe (GBFXT)' },
-  { value: 'Genoa', label: 'Genoa (ITGOA)' },
+  // Vietnam
+  'Ho Chi Minh City', 'Hai Phong', 'Da Nang', 'Quy Nhon', 'Vung Tau',
+  // Europe
+  'Hamburg', 'Rotterdam', 'Antwerp', 'Felixstowe', 'Le Havre', 'Genoa',
+  'Barcelona', 'Piraeus', 'Bremerhaven', 'Gdansk', 'Gothenburg',
+  // North America
+  'Los Angeles', 'Long Beach', 'New York', 'Savannah', 'Houston',
+  'Oakland', 'Seattle', 'Vancouver', 'Montreal',
+  // Asia
+  'Shanghai', 'Singapore', 'Busan', 'Tokyo', 'Yokohama', 'Osaka',
+  'Hong Kong', 'Shenzhen', 'Ningbo', 'Qingdao', 'Kaohsiung',
+  'Port Klang', 'Laem Chabang', 'Jakarta', 'Manila',
+  // South Asia & Middle East
+  'Mumbai', 'Chennai', 'Colombo', 'Jeddah', 'Dubai', 'Karachi',
+  // Oceania
+  'Sydney', 'Melbourne', 'Brisbane', 'Auckland',
+  // Africa
+  'Durban', 'Cape Town', 'Mombasa', 'Lagos',
+  // South America
+  'Santos', 'Buenos Aires', 'Callao', 'Cartagena',
 ];
 
 interface RateResult {
@@ -131,16 +136,19 @@ export default function HwlRateLookupPage() {
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
               Cảng xếp hàng (POL)
             </label>
-            <select
+            <input
+              type="text"
+              list="ports-pol"
               value={pol}
               onChange={e => setPol(e.target.value)}
+              placeholder="Gõ tên cảng (VD: Ho Chi Minh City)"
               className="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
-            >
-              <option value="">-- Chọn cảng --</option>
+            />
+            <datalist id="ports-pol">
               {POPULAR_PORTS.map(p => (
-                <option key={p.value} value={p.value}>{p.label}</option>
+                <option key={p} value={p} />
               ))}
-            </select>
+            </datalist>
           </div>
 
           {/* POD */}
@@ -148,16 +156,19 @@ export default function HwlRateLookupPage() {
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
               Cảng dỡ hàng (POD)
             </label>
-            <select
+            <input
+              type="text"
+              list="ports-pod"
               value={pod}
               onChange={e => setPod(e.target.value)}
+              placeholder="Gõ tên cảng (VD: Hamburg)"
               className="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
-            >
-              <option value="">-- Chọn cảng --</option>
+            />
+            <datalist id="ports-pod">
               {POPULAR_PORTS.map(p => (
-                <option key={p.value} value={p.value}>{p.label}</option>
+                <option key={p} value={p} />
               ))}
-            </select>
+            </datalist>
           </div>
         </div>
 
