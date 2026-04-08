@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const CONTAINER_TYPES = [
   { value: '20GP', label: "20' General Purpose" },
@@ -11,29 +11,72 @@ const CONTAINER_TYPES = [
   { value: '40RH', label: "40' Reefer High Cube" },
 ];
 
-// Gợi ý cảng phổ biến — user vẫn có thể gõ tự do bất kỳ cảng nào
-const POPULAR_PORTS = [
-  // Vietnam
-  'Ho Chi Minh City', 'Hai Phong', 'Da Nang', 'Quy Nhon', 'Vung Tau',
-  // Europe
-  'Hamburg', 'Rotterdam', 'Antwerp', 'Felixstowe', 'Le Havre', 'Genoa',
-  'Barcelona', 'Piraeus', 'Bremerhaven', 'Gdansk', 'Gothenburg',
-  // North America
-  'Los Angeles', 'Long Beach', 'New York', 'Savannah', 'Houston',
-  'Oakland', 'Seattle', 'Vancouver', 'Montreal',
-  // Asia
-  'Shanghai', 'Singapore', 'Busan', 'Tokyo', 'Yokohama', 'Osaka',
-  'Hong Kong', 'Shenzhen', 'Ningbo', 'Qingdao', 'Kaohsiung',
-  'Port Klang', 'Laem Chabang', 'Jakarta', 'Manila',
-  // South Asia & Middle East
-  'Mumbai', 'Chennai', 'Colombo', 'Jeddah', 'Dubai', 'Karachi',
-  // Oceania
-  'Sydney', 'Melbourne', 'Brisbane', 'Auckland',
-  // Africa
-  'Durban', 'Cape Town', 'Mombasa', 'Lagos',
-  // South America
-  'Santos', 'Buenos Aires', 'Callao', 'Cartagena',
-];
+interface Port { name: string; code: string; }
+
+function PortSearch({ value, onChange, placeholder, id }: {
+  value: string; onChange: (v: string) => void; placeholder: string; id: string;
+}) {
+  const [ports, setPorts] = useState<Port[]>([]);
+  const [query, setQuery] = useState(value);
+  const [open, setOpen] = useState(false);
+  const [filtered, setFiltered] = useState<Port[]>([]);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch('/ports.json').then(r => r.json()).then(setPorts).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!query || query.length < 2) { setFiltered([]); return; }
+    const q = query.toLowerCase();
+    const results = ports.filter(p =>
+      p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q)
+    ).slice(0, 15);
+    setFiltered(results);
+  }, [query, ports]);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <input
+        type="text"
+        id={id}
+        value={query}
+        onChange={e => { setQuery(e.target.value); setOpen(true); onChange(e.target.value); }}
+        onFocus={() => setOpen(true)}
+        placeholder={placeholder}
+        className="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+        autoComplete="off"
+      />
+      {open && filtered.length > 0 && (
+        <ul className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+          {filtered.map(p => (
+            <li
+              key={p.code}
+              className="px-3 py-2 hover:bg-teal-50 cursor-pointer text-sm"
+              onMouseDown={() => {
+                const display = p.name.split(',')[0].trim();
+                setQuery(`${display} (${p.code})`);
+                onChange(display);
+                setOpen(false);
+              }}
+            >
+              <span className="font-medium text-teal-700">{p.code}</span>
+              <span className="text-slate-600 ml-2">{p.name}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 interface RateResult {
   carrier: string;
@@ -136,19 +179,12 @@ export default function HwlRateLookupPage() {
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
               Cảng xếp hàng (POL)
             </label>
-            <input
-              type="text"
-              list="ports-pol"
+            <PortSearch
+              id="pol"
               value={pol}
-              onChange={e => setPol(e.target.value)}
-              placeholder="Gõ tên cảng (VD: Ho Chi Minh City)"
-              className="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+              onChange={setPol}
+              placeholder="Gõ tên cảng hoặc mã (VD: Ho Chi Minh, VNSGN)"
             />
-            <datalist id="ports-pol">
-              {POPULAR_PORTS.map(p => (
-                <option key={p} value={p} />
-              ))}
-            </datalist>
           </div>
 
           {/* POD */}
@@ -156,19 +192,12 @@ export default function HwlRateLookupPage() {
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
               Cảng dỡ hàng (POD)
             </label>
-            <input
-              type="text"
-              list="ports-pod"
+            <PortSearch
+              id="pod"
               value={pod}
-              onChange={e => setPod(e.target.value)}
-              placeholder="Gõ tên cảng (VD: Hamburg)"
-              className="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+              onChange={setPod}
+              placeholder="Gõ tên cảng hoặc mã (VD: Hamburg, DEHAM)"
             />
-            <datalist id="ports-pod">
-              {POPULAR_PORTS.map(p => (
-                <option key={p} value={p} />
-              ))}
-            </datalist>
           </div>
         </div>
 
