@@ -26,6 +26,8 @@ interface RateData {
   transitTime: string;
   surcharges: Surcharge[];
   totalAmount: number;
+  total20: number;
+  total40: number;
   isReefer: boolean;
   inclText: string;
   ofInclText: string;
@@ -51,17 +53,13 @@ function parseHlagDate(dateStr: string): Date | string {
 function buildRemark(rate: RateData): string {
   const parts: string[] = [];
 
-  // Surcharges NOT in Incl (Incl only has Freight Surcharges)
-  const freightKeys = ['EA', 'MFR', 'EFS', 'TAO', 'TAD', 'WRS', 'PCC', 'CSF'];
-  const nonInclSurcharges = rate.surcharges.filter(s => !freightKeys.includes(s.key));
-  for (const s of nonInclSurcharges) {
-    parts.push(`${s.name}: ${s.currency} ${s.amount20.toLocaleString()}/${s.amount40.toLocaleString()}`);
-  }
+  // OWS (Heavy Lift Charge) if present
+  const hlc = rate.surcharges.find(s => s.key === 'HLC');
+  if (hlc) parts.push(hlc.name); // Already formatted: "Heavy Lift Charge (>=20t: USD400, >=34t: USD450)"
 
-  // Per-BL charges from notes
-  if (rate.notes) parts.push(rate.notes);
+  // Quotation number — not available from web scrape, leave blank for now
 
-  // Via route
+  // Via transit ports
   if (rate.viaRoute) parts.push(`via ${rate.viaRoute}`);
 
   return parts.join('. ');
@@ -93,13 +91,13 @@ export async function generateExcel(rate: RateData): Promise<Buffer> {
     rate.carrier || 'HPL',                             // Carrier (HPL per template)
     '',                                                // Transit (template leaves blank)
     '',                                                // GROUP (template leaves blank)
-    // Price columns — reefer goes to 20RF/40RH, dry goes to 20DC/40DC/40HC
-    rate.isReefer ? '' : (rate.oceanFreight20 || ''),  // 20DC
-    rate.isReefer ? '' : (rate.oceanFreight40 || ''),  // 40DC
-    rate.isReefer ? '' : (rate.oceanFreight40 || ''),  // 40HC (same as 40DC for dry)
+    // Price columns — use TOTAL (all-in) not base O/F
+    rate.isReefer ? '' : (rate.total20 || ''),         // 20DC
+    rate.isReefer ? '' : (rate.total40 || ''),         // 40DC
+    rate.isReefer ? '' : (rate.total40 || ''),         // 40HC (same as 40DC for dry)
     '',                                                // 45SH
-    rate.isReefer ? (rate.oceanFreight20 || '') : '',  // 20RF
-    rate.isReefer ? (rate.oceanFreight40 || '') : '',  // 40RH
+    rate.isReefer ? (rate.total20 || '') : '',         // 20RF
+    rate.isReefer ? (rate.total40 || '') : '',         // 40RH
     '',                                                // Special
     '', '', '', '', '', '',                             // CS_* columns (blank)
     parseHlagDate(rate.validFrom),                     // ValidFrom (Date object)
