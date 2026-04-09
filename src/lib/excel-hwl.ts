@@ -51,11 +51,17 @@ function parseHlagDate(dateStr: string): Date | string {
 function buildRemark(rate: RateData): string {
   const parts: string[] = [];
 
-  // Heavy Lift Charge note (like template: "OWS FOR CONT 20. >=20 tons: 400$, >=34 tons: 450$")
-  const hlc = rate.surcharges.find(s => s.key === 'HLC');
-  if (hlc) parts.push(`OWS FOR CONT 20. >=20 tons: ${hlc.amount20}$, >=34 tons: ${hlc.amount40}$`);
+  // Surcharges NOT in Incl (Incl only has Freight Surcharges)
+  const freightKeys = ['EA', 'MFR', 'EFS', 'TAO', 'TAD', 'WRS', 'PCC', 'CSF'];
+  const nonInclSurcharges = rate.surcharges.filter(s => !freightKeys.includes(s.key));
+  for (const s of nonInclSurcharges) {
+    parts.push(`${s.name}: ${s.currency} ${s.amount20.toLocaleString()}/${s.amount40.toLocaleString()}`);
+  }
 
-  // Via route (like template: "via TANJUNG PELEPAS, MY")
+  // Per-BL charges from notes
+  if (rate.notes) parts.push(rate.notes);
+
+  // Via route
   if (rate.viaRoute) parts.push(`via ${rate.viaRoute}`);
 
   return parts.join('. ');
