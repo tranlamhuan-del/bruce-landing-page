@@ -96,8 +96,11 @@ interface RateResult {
   inclText: string;
   viaRoute: string;
   transitTime: string;
-  surcharges: { name: string; amount: number; currency: string }[];
+  surcharges: { key: string; name: string; amount20: number; amount40: number; currency: string; per: string }[];
   totalAmount: number;
+  total20: number;
+  total40: number;
+  notes: string;
 }
 
 export default function HwlRateLookupPage() {
@@ -285,7 +288,7 @@ export default function HwlRateLookupPage() {
                   <td className="py-1.5 text-right text-slate-800 font-medium">{result.currency} {result.oceanFreight20?.toLocaleString() || '—'}</td>
                   <td className="py-1.5 text-right text-slate-800 font-medium">{result.currency} {result.oceanFreight40?.toLocaleString() || '—'}</td>
                 </tr>
-                {result.surcharges.map((s: { key: string; name: string; currency: string; amount20: number; amount40: number }, i: number) => (
+                {result.surcharges.map((s, i) => (
                   <tr key={i} className="border-t border-slate-50">
                     <td className="py-1.5 text-slate-700">{s.name}</td>
                     <td className="py-1.5 text-right text-slate-800 font-medium">{s.currency} {s.amount20?.toLocaleString() || '—'}</td>
