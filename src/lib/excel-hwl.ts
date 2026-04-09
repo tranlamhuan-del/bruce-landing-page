@@ -53,11 +53,9 @@ function parseHlagDate(dateStr: string): Date | string {
 function buildRemark(rate: RateData): string {
   const parts: string[] = [];
 
-  // OWS (Heavy Lift Charge) if present
+  // OWS (Heavy Lift Charge) if present — from HLAG scrape
   const hlc = rate.surcharges.find(s => s.key === 'HLC');
-  if (hlc) parts.push(hlc.name); // Already formatted: "Heavy Lift Charge (>=20t: USD400, >=34t: USD450)"
-
-  // Quotation number — not available from web scrape, leave blank for now
+  if (hlc) parts.push(`OWS FOR CONT 20. ${hlc.name.replace('Heavy Lift Charge ', '')}`);
 
   // Via transit ports
   if (rate.viaRoute) parts.push(`via ${rate.viaRoute}`);
@@ -104,7 +102,7 @@ export async function generateExcel(rate: RateData): Promise<Buffer> {
     parseHlagDate(rate.validTo),                       // ValidTo (Date object)
     '',                                                // S/CNumber
     'MR DUNG',                                         // SaleCarrier (per template)
-    rate.inclText || '',                               // Incl (MFR $313/626, TAO $100/200)
+    'Giá all included',                                 // Incl
     buildRemark(rate),                                 // Remark
   ];
 
