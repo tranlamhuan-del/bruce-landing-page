@@ -28,6 +28,7 @@ interface RateData {
   totalAmount: number;
   isReefer: boolean;
   inclText: string;
+  ofInclText: string;
   viaRoute: string;
   notes: string;
 }
@@ -51,6 +52,9 @@ function buildRemark(rate: RateData): string {
   const parts: string[] = [];
 
   // Heavy Lift Charge note (like template: "OWS FOR CONT 20. >=20 tons: 400$, >=34 tons: 450$")
+  const hlc = rate.surcharges.find(s => s.key === 'HLC');
+  if (hlc) parts.push(`OWS FOR CONT 20. >=20 tons: ${hlc.amount20}$, >=34 tons: ${hlc.amount40}$`);
+
   // Via route (like template: "via TANJUNG PELEPAS, MY")
   if (rate.viaRoute) parts.push(`via ${rate.viaRoute}`);
 
