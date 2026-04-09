@@ -83,10 +83,18 @@ interface RateResult {
   containerType: string;
   pol: string;
   pod: string;
+  polCode: string;
+  podCode: string;
+  dest: string;
   oceanFreight: number;
+  oceanFreight20: number;
+  oceanFreight40: number;
   currency: string;
   validFrom: string;
   validTo: string;
+  isReefer: boolean;
+  inclText: string;
+  viaRoute: string;
   transitTime: string;
   surcharges: { name: string; amount: number; currency: string }[];
   totalAmount: number;
@@ -241,17 +249,11 @@ export default function HwlRateLookupPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
             <div className="bg-teal-50 rounded-lg p-3">
-              <div className="text-xs text-teal-600 font-medium">Ocean Freight</div>
+              <div className="text-xs text-teal-600 font-medium">Ocean Freight ({result.isReefer ? '20RE / 40RE' : '20DC / 40DC'})</div>
               <div className="text-xl font-bold text-teal-800">
-                {result.currency} {result.oceanFreight.toLocaleString()}
-              </div>
-            </div>
-            <div className="bg-slate-50 rounded-lg p-3">
-              <div className="text-xs text-slate-500 font-medium">Tổng cộng</div>
-              <div className="text-xl font-bold text-slate-800">
-                {result.currency} {result.totalAmount.toLocaleString()}
+                {result.currency} {result.oceanFreight20?.toLocaleString() || '—'} / {result.oceanFreight40?.toLocaleString() || '—'}
               </div>
             </div>
             <div className="bg-slate-50 rounded-lg p-3">
@@ -263,37 +265,50 @@ export default function HwlRateLookupPage() {
               <div className="text-sm font-bold text-slate-800">{result.validFrom} → {result.validTo}</div>
             </div>
           </div>
+          {result.viaRoute && (
+            <div className="text-sm text-slate-500 mb-4">Tuyến: {result.polCode} → {result.podCode} via {result.viaRoute}</div>
+          )}
 
           <div className="border-t border-slate-100 pt-4">
             <div className="text-sm font-medium text-slate-600 mb-2">Chi tiết phụ phí</div>
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-slate-500">
-                  <th className="pb-2">Phụ phí</th>
-                  <th className="pb-2 text-right">Số tiền</th>
+                  <th className="pb-2">Khoản mục</th>
+                  <th className="pb-2 text-right">{result.isReefer ? '20RE' : '20DC'}</th>
+                  <th className="pb-2 text-right">{result.isReefer ? '40RE' : '40DC'}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr className="border-t border-slate-50">
                   <td className="py-1.5 text-slate-700">Ocean Freight (O/F)</td>
-                  <td className="py-1.5 text-right text-slate-800 font-medium">{result.currency} {result.oceanFreight.toLocaleString()}</td>
+                  <td className="py-1.5 text-right text-slate-800 font-medium">{result.currency} {result.oceanFreight20?.toLocaleString() || '—'}</td>
+                  <td className="py-1.5 text-right text-slate-800 font-medium">{result.currency} {result.oceanFreight40?.toLocaleString() || '—'}</td>
                 </tr>
-                {result.surcharges.map((s, i) => (
+                {result.surcharges.map((s: { key: string; name: string; currency: string; amount20: number; amount40: number }, i: number) => (
                   <tr key={i} className="border-t border-slate-50">
                     <td className="py-1.5 text-slate-700">{s.name}</td>
-                    <td className="py-1.5 text-right text-slate-800 font-medium">{s.currency} {s.amount.toLocaleString()}</td>
+                    <td className="py-1.5 text-right text-slate-800 font-medium">{s.currency} {s.amount20?.toLocaleString() || '—'}</td>
+                    <td className="py-1.5 text-right text-slate-800 font-medium">{s.currency} {s.amount40?.toLocaleString() || '—'}</td>
                   </tr>
                 ))}
                 <tr className="border-t-2 border-slate-200 font-bold">
                   <td className="py-2 text-slate-800">TỔNG</td>
-                  <td className="py-2 text-right text-teal-700">{result.currency} {result.totalAmount.toLocaleString()}</td>
+                  <td className="py-2 text-right text-teal-700">{result.currency} {result.total20?.toLocaleString() || '—'}</td>
+                  <td className="py-2 text-right text-teal-700">{result.currency} {result.total40?.toLocaleString() || '—'}</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
+          {result.notes && (
+            <div className="mt-3 text-xs text-slate-500 bg-slate-50 rounded p-3">
+              <span className="font-medium">Ghi chú:</span> {result.notes}
+            </div>
+          )}
+
           <div className="mt-4 text-xs text-slate-400">
-            Hãng tàu: {result.carrier} | Container: {containerType} | {result.pol} → {result.pod}
+            Hãng tàu: {result.carrier} | {result.polCode || result.pol} → {result.podCode || result.pod}
           </div>
         </div>
       )}

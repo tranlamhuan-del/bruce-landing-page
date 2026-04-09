@@ -1,5 +1,14 @@
 import ExcelJS from 'exceljs';
 
+interface Surcharge {
+  key: string;
+  name: string;
+  amount20: number;
+  amount40: number;
+  currency: string;
+  per: string;
+}
+
 interface RateData {
   carrier: string;
   containerType: string;
@@ -7,17 +16,23 @@ interface RateData {
   polCode: string;
   pod: string;
   podCode: string;
+  dest: string;
   oceanFreight: number;
+  oceanFreight20: number;
+  oceanFreight40: number;
   currency: string;
   validFrom: string;
   validTo: string;
   transitTime: string;
-  surcharges: { name: string; amount: number; currency: string; per: string }[];
+  surcharges: Surcharge[];
   totalAmount: number;
+  isReefer: boolean;
+  inclText: string;
+  viaRoute: string;
   notes: string;
 }
 
-// CRM 27-column format
+// CRM 27-column format — matches TeamplateHLAG.xlsx
 const CRM_HEADERS = [
   'POL', 'POD', 'Dest', 'SerMode', 'Commodity', 'Carrier', 'Transit', 'GROUP',
   '20DC', '40DC', '40HC', '45SH', '20RF', '40RH', 'Special',
@@ -25,82 +40,72 @@ const CRM_HEADERS = [
   'ValidFrom', 'ValidTo', 'S/CNumber', 'SaleCarrier', 'Incl', 'Remark',
 ];
 
-function mapContainerToColumn(containerType: string): { col20RF?: number; col40RH?: number; col20DC?: number; col40DC?: number; col40HC?: number } {
-  switch (containerType) {
-    case '20RE': return { col20RF: 1 };
-    case '40RE': case '40RH': return { col40RH: 1 };
-    case '20GP': return { col20DC: 1 };
-    case '40GP': return { col40DC: 1 };
-    case '40HC': return { col40HC: 1 };
-    default: return {};
-  }
+function parseHlagDate(dateStr: string): Date | string {
+  // Convert "8 Apr 2026" to Date object for Excel
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return isNaN(d.getTime()) ? dateStr : d;
 }
 
-function buildRemarkFromSurcharges(surcharges: RateData['surcharges'], notes: string): string {
-  if (surcharges.length === 0) return notes;
+function buildRemark(rate: RateData): string {
+  const parts: string[] = [];
 
-  const lines = surcharges.map(s => `${s.name}: ${s.currency} ${s.amount} per ${s.per}`);
-  if (notes) lines.push(notes);
-  return lines.join('; ');
-}
+  // Heavy Lift Charge note (like template: "OWS FOR CONT 20. >=20 tons: 400$, >=34 tons: 450$")
+  // Via route (like template: "via TANJUNG PELEPAS, MY")
+  if (rate.viaRoute) parts.push(`via ${rate.viaRoute}`);
 
-function buildInclFromSurcharges(surcharges: RateData['surcharges']): string {
-  // Surcharges commonly included in O/F
-  const included = surcharges
-    .filter(s => ['CSF', 'PSS', 'DTHC', 'BAF', 'CAF'].includes(s.name))
-    .map(s => s.name);
-  return included.join(', ');
+  return parts.join('. ');
 }
 
 export async function generateExcel(rate: RateData): Promise<Buffer> {
   const workbook = new ExcelJS.Workbook();
-  const sheet = workbook.addWorksheet('Rates');
+  const sheet = workbook.addWorksheet('Sheet2');
 
   // Headers
   sheet.addRow(CRM_HEADERS);
 
   // Style headers
   const headerRow = sheet.getRow(1);
-  headerRow.font = { bold: true, size: 11 };
+  headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 11 };
   headerRow.fill = {
     type: 'pattern',
     pattern: 'solid',
     fgColor: { argb: 'FF4472C4' },
   };
-  headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 11 };
 
-  // Determine which rate column to fill
-  const colMap = mapContainerToColumn(rate.containerType);
-  const isReefer = ['20RE', '40RE', '40RH'].includes(rate.containerType);
-  const commodity = isReefer ? 'FAK - RF' : 'FAK';
-
-  // Data row
-  const row: (string | number)[] = [
-    rate.polCode || rate.pol,                    // POL
-    rate.podCode || rate.pod,                    // POD
-    `${rate.pod}, ${rate.podCode?.slice(0, 2) || ''}`, // Dest
-    'CY/CY',                                    // SerMode
-    commodity,                                   // Commodity
-    rate.carrier,                                // Carrier
-    rate.transitTime,                            // Transit
-    'FAK',                                       // GROUP
-    colMap.col20DC ? rate.oceanFreight : '',      // 20DC
-    colMap.col40DC ? rate.oceanFreight : '',      // 40DC
-    colMap.col40HC ? rate.oceanFreight : '',      // 40HC
-    '',                                          // 45SH
-    colMap.col20RF ? rate.oceanFreight : '',      // 20RF
-    colMap.col40RH ? rate.oceanFreight : '',      // 40RH
-    '',                                          // Special
-    '', '', '', '', '', '',                       // CS_* columns
-    rate.validFrom,                              // ValidFrom
-    rate.validTo,                                // ValidTo
-    '',                                          // S/CNumber
-    '',                                          // SaleCarrier
-    buildInclFromSurcharges(rate.surcharges),     // Incl
-    buildRemarkFromSurcharges(rate.surcharges, rate.notes), // Remark
+  // Data row — match template format exactly
+  const row: (string | number | Date)[] = [
+    rate.polCode || rate.pol,                          // POL (VNSGN)
+    rate.podCode || rate.pod,                          // POD (DEHAM)
+    rate.dest || `${rate.pod}, ${(rate.podCode || '').substring(0, 2)}`,  // Dest (HAMBURG, DE)
+    'CY/CY',                                          // SerMode
+    '',                                                // Commodity (template leaves blank)
+    rate.carrier || 'HPL',                             // Carrier (HPL per template)
+    '',                                                // Transit (template leaves blank)
+    '',                                                // GROUP (template leaves blank)
+    // Price columns — reefer goes to 20RF/40RH, dry goes to 20DC/40DC/40HC
+    rate.isReefer ? '' : (rate.oceanFreight20 || ''),  // 20DC
+    rate.isReefer ? '' : (rate.oceanFreight40 || ''),  // 40DC
+    rate.isReefer ? '' : (rate.oceanFreight40 || ''),  // 40HC (same as 40DC for dry)
+    '',                                                // 45SH
+    rate.isReefer ? (rate.oceanFreight20 || '') : '',  // 20RF
+    rate.isReefer ? (rate.oceanFreight40 || '') : '',  // 40RH
+    '',                                                // Special
+    '', '', '', '', '', '',                             // CS_* columns (blank)
+    parseHlagDate(rate.validFrom),                     // ValidFrom (Date object)
+    parseHlagDate(rate.validTo),                       // ValidTo (Date object)
+    '',                                                // S/CNumber
+    'MR DUNG',                                         // SaleCarrier (per template)
+    rate.inclText || '',                               // Incl (MFR $313/626, TAO $100/200)
+    buildRemark(rate),                                 // Remark
   ];
 
   sheet.addRow(row);
+
+  // Format date columns
+  const dateFormat = 'DD MMM YYYY';
+  sheet.getColumn(22).numFmt = dateFormat; // ValidFrom
+  sheet.getColumn(23).numFmt = dateFormat; // ValidTo
 
   // Auto-width columns
   sheet.columns.forEach(col => {
