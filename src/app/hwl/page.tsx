@@ -63,8 +63,9 @@ function PortSearch({ value, onChange, placeholder, id }: {
               className="px-3 py-2 hover:bg-teal-50 cursor-pointer text-sm"
               onMouseDown={() => {
                 const display = p.name.split(',')[0].trim();
-                setQuery(`${display} (${p.code})`);
-                onChange(display);
+                const fullValue = `${display} (${p.code})`;
+                setQuery(fullValue);
+                onChange(fullValue);
                 setOpen(false);
               }}
             >
