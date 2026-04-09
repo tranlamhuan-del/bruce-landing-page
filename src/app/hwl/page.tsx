@@ -102,7 +102,7 @@ interface RateResult {
 
 export default function HwlRateLookupPage() {
   const [containerType, setContainerType] = useState('40RE');
-  const [pol, setPol] = useState('Ho Chi Minh City');
+  const [pol, setPol] = useState('');
   const [pod, setPod] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<RateResult | null>(null);
