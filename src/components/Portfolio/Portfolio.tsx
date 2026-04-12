@@ -26,6 +26,7 @@ const portfolioItems = [
       "Tự học rồi chia sẻ lại — từ AI căn bản đến prompt engineering. Có quiz, có bài tập, có hỏi đáp. Ai cũng cùng học và thực hành với tôi được.",
     links: [
       { href: "/learn/ai-bai-1", label: "Bắt đầu xem Bài 1 →" },
+      { href: "/review-l1", label: "Review Level 1 — Nộp bài →" },
     ],
   },
   {
