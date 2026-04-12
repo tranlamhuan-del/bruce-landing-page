@@ -25,7 +25,7 @@ export async function POST(request: Request) {
         score,
         passed: passed ? "Dat" : "Chua dat",
         time: now,
-        quiz: "bai-2",
+        quiz: "l2-bai-1",
         lang: lang || "vi",
       }),
     });

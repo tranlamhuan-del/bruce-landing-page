@@ -27,6 +27,7 @@ const portfolioItems = [
     links: [
       { href: "/learn/ai-bai-1", label: "Bắt đầu xem Bài 1 →" },
       { href: "/review-l1", label: "Review Level 1 — Nộp bài →" },
+      { href: "/quiz/ai-l2-bai-1", label: "Level 2 Bài 1: Agentic AI & Vibe Working →" },
     ],
   },
   {
