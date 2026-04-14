@@ -30,9 +30,9 @@ export default function About() {
                 </p>
                 <p>
                   Học Ngoại Thương (UEH), rồi lấy Thạc sĩ Tài chính tại Massey
-                  University (New Zealand). Nền tảng đó giúp tôi tiếp cận mọi thứ —
-                  từ quản trị đến AI — bằng tư duy hệ thống và logic, không chạy
-                  theo trend.
+                  University (New Zealand) — chương trình liên kết với UEH. Nền
+                  tảng đó giúp tôi tiếp cận mọi thứ — từ quản trị đến AI — bằng
+                  tư duy hệ thống và logic, không chạy theo trend.
                 </p>
               </div>
             </FadeIn>
