@@ -56,8 +56,8 @@ export default function Contact() {
               Liên hệ
             </h2>
             <h3 className="text-5xl md:text-6xl font-[family-name:var(--font-headline)] font-bold mb-12">
-              Kết nối{" "}
-              <span className="text-primary">cùng nhau</span>.
+              Nhắn Bruce{" "}
+              <span className="text-primary">vài dòng</span>.
             </h3>
           </FadeIn>
 
@@ -150,7 +150,7 @@ export default function Contact() {
                 </div>
                 <div className="space-y-2">
                   <label className="text-xs font-[family-name:var(--font-label)] uppercase tracking-widest text-on-surface-variant">
-                    Quan tâm về
+                    Chủ đề
                   </label>
                   <select
                     className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary px-0 py-2 transition-all font-[family-name:var(--font-body)] text-on-surface outline-none"
@@ -159,9 +159,12 @@ export default function Contact() {
                     required
                   >
                     <option value="" disabled>Chọn chủ đề...</option>
-                    <option value="Muốn trao đổi ngay">Muốn trao đổi ngay</option>
-                    <option value="Đang tìm hiểu">Đang tìm hiểu</option>
-                    <option value="Chỉ hỏi thăm">Chỉ hỏi thăm</option>
+                    <option value="AI & công nghệ">AI & công nghệ</option>
+                    <option value="Đầu tư & tài chính">Đầu tư & tài chính</option>
+                    <option value="Chạy bộ & Stoicism">Chạy bộ & Stoicism</option>
+                    <option value="Âm nhạc">Âm nhạc</option>
+                    <option value="Góp ý website">Góp ý website</option>
+                    <option value="Khác">Khác</option>
                   </select>
                 </div>
                 <div className="space-y-2">

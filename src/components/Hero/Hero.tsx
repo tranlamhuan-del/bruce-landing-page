@@ -34,20 +34,20 @@ export default function Hero() {
           <FadeIn delay={0.5}>
             <div className="flex flex-wrap gap-4">
               <motion.a
-                href="#projects"
+                href="/learn/ai-bai-1"
                 className="bg-primary text-on-primary px-8 py-4 font-[family-name:var(--font-headline)] font-bold text-lg transition-all"
                 whileHover={{ scale: 1.03, filter: "brightness(1.1)" }}
                 whileTap={{ scale: 0.97 }}
               >
-                Xem dự án
+                Bắt đầu khoá AI
               </motion.a>
               <motion.a
-                href="#books"
+                href="#projects"
                 className="border border-outline text-on-surface px-8 py-4 font-[family-name:var(--font-headline)] font-bold text-lg hover:bg-surface-container-high transition-all"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
-                Sách hay
+                Xem dự án
               </motion.a>
             </div>
           </FadeIn>

@@ -10,7 +10,7 @@ interface Message {
 }
 
 const GREETING =
-  "Xin chào! Tôi là trợ lý ảo của **Bruce Tran** — chuyên gia Quản Trị Doanh Nghiệp & Tài Chính Đầu Tư.\n\nTôi có thể giúp bạn tìm hiểu về:\n- 💼 Dịch vụ tư vấn quản trị & tài chính\n- 🤖 Giải pháp AI cho doanh nghiệp\n- 📚 Kinh nghiệm & triết lý đầu tư\n\nBạn cần hỗ trợ gì?";
+  "Xin chào! Tôi là **phiên bản AI của Bruce** 👋\n\nWebsite này là nơi Bruce chia sẻ hành trình khám phá AI, đầu tư, Stoicism, chạy bộ và nhạc — không bán dịch vụ gì cả.\n\nAnh/chị muốn trò chuyện về điều gì? Hoặc nếu đang tò mò về AI, thử ghé **Bài 1** của khóa AI trên web này để bắt đầu hành trình cùng Bruce nhé.";
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDEV-NeNFyjELGhKDgyrWUhf9WTxsxxrpzzS6GFEcdCxy0AsYnDFRSy84J-6b7FCQ/exec";
 
@@ -32,8 +32,8 @@ function processAIResponse(
     try {
       const leadData = JSON.parse(match[1]);
 
-      if (leadData.phone || leadData.email) {
-        // Build formatted chat history
+      // New rule: log visitor whenever we have name OR feedback (no lead selling)
+      if (leadData.name || leadData.feedback) {
         const formattedHistory = chatHistory
           .map((msg) => {
             const role = msg.role === "user" ? "Khách" : "AI";
@@ -53,7 +53,7 @@ function processAIResponse(
 }
 
 async function sendLeadToGoogleSheets(
-  leadData: { name?: string; phone?: string; email?: string; interest?: string; heat?: string },
+  leadData: { name?: string; phone?: string; email?: string; interest?: string; heat?: string; feedback?: string },
   chatHistoryText: string,
   sessionId: string
 ) {
@@ -62,10 +62,11 @@ async function sendLeadToGoogleSheets(
   try {
     const payload = JSON.stringify({
       name: leadData.name || "",
-      phone: leadData.phone || "",
-      email: leadData.email || "",
+      phone: "",
+      email: "",
       interest: leadData.interest || "",
-      heat: leadData.heat || "warm",
+      heat: "visitor",
+      feedback: leadData.feedback || "",
       source: window.location.href,
       sessionId,
       chatHistory: chatHistoryText,
