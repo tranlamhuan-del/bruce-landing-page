@@ -26,9 +26,6 @@ const portfolioItems = [
       "Tự học rồi chia sẻ lại — từ AI căn bản đến Harness Engineering. Có quiz, có bài tập, có hỏi đáp. Ai cũng cùng học và thực hành với tôi được.",
     links: [
       { href: "/learn/ai-bai-1", label: "Bắt đầu xem Bài 1 →" },
-      { href: "/review-l1", label: "Review Level 1 — Nộp bài →" },
-      { href: "/quiz/ai-l2-bai-1", label: "Level 2 Bài 1: Agentic AI & Vibe Working →" },
-      { href: "/quiz/ai-l2-bai-2", label: "Level 2 Bài 2: Agentic Workspace & 3 Platform →" },
     ],
   },
   {
