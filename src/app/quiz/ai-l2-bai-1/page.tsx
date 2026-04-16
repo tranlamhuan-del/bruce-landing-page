@@ -235,7 +235,7 @@ export default function QuizL2Bai1() {
       lessonNumber={4}
       questions={questions}
       passScore={7}
-      nextLesson="Level 2 Bài 2: Công cụ Agentic AI"
+      nextLesson="Level 2 Bài 2: Agentic Workspace & 3 Platform"
       apiEndpoint="/api/quiz-ai-l2-bai-1"
     />
   );
